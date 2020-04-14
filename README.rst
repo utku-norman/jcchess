@@ -1,47 +1,20 @@
-JCchess - John Cheetham - http://www.johncheetham.com/projects/jcchess
- 
-Description
------------
-JCchess is a program to play chess against UCI chess engines.
+JCchess - forked from John Cheetham - http://www.johncheetham.com/projects/jcchess
+Tweaked to run with python2 and have an engine (stockfish) coming along.
+Tested on Ubuntu 18.04.4 with Python 2.7(.17).
 
 Requirements
 ------------
-python3 python-cairo python-gobject
-
-Package names to install.
-
-================== = ================================
-distro             : packages
-================== = ================================
-Debian/Mint/Ubuntu : python3-gi-cairo gir1.2-rsvg-2.0
-Fedora             : python3-cairo, python3-gobject
-Arch               : python-cairo, python-gobject
-================== = ================================
+sudo apt install python-gi python-cairo python-gobject python-gi-cairo
 
 Usage
 -----
-Enter 'python3 run.py' to start the program.
-Alternatively you can install it on your system with 'python3 setup.py install'
-(as root user) and then start it from the gui menu or by entering 'jcchess' into
-a terminal.
-Windows versions are available on the website.
+Enter 'python run.py' to start the program. 
 
-Adding a UCI engine
--------------------
-To add an engine to play against click on Options, engines then click
-the 'Add' button to add a new engine. Navigate to the engine executable
-and add it. Then click the OK button.
-
-Next do Options, players and set the black player to the new engine.
-
-Click on the 'tick' button at the top of the screen to start the game 
-and then move a white piece.
-
-For debugging start with -v (all debugging messages) or -vuci (uci
-messages).
 
 Acknowledgements
 ----------------
+forked from John Cheetham - http://www.johncheetham.com/projects/jcchess
+
 The initial version was based on gshogi.
 see http://www.johncheetham.com/projects/gshogi
 
