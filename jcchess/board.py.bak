@@ -17,10 +17,8 @@
 #   along with jcchess.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from __future__ import division
-from __future__ import absolute_import
 import gi
-gi.require_version(u'Rsvg', u'2.0')
+gi.require_version('Rsvg', '2.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
@@ -41,14 +39,14 @@ SCALE = 0.9      # scale the pieces so they occupy 90% of the board square
 LINEWIDTH = 2    # width of lines on the board
 
 
-class Board(object):
+class Board:
 
     def __init__(self):
         self.init_board()
         self.dnd = None        
 
-    def init_board(self, fen=u"std"):
-        if fen == u"std":
+    def init_board(self, fen="std"):
+        if fen == "std":
             self.chessboard = chess.Board() # init board
         else:
             self.chessboard = chess.Board(fen)    
@@ -59,14 +57,14 @@ class Board(object):
     # convert jcchess co-ordinates for square into
     # standard notation (e.g.  (1, 0) -> b1)
     def get_square_posn(self, x, y):
-        lets = u"abcdefghi"
-        sq = lets[x] + unicode(y+1) 
+        lets = "abcdefghi"
+        sq = lets[x] + str(y+1) 
         return sq
 
     # convert standard notation for square into
     # jcchess co-ordinates (e.g.  b1 -> (1, 0) )
     def get_gs_square_posn(self, sq):        
-        lets = u"abcdefgh"
+        lets = "abcdefgh"
         x = lets.index(sq[0:1])
         y = int(sq[1:2]) - 1
         return x, y
@@ -79,16 +77,16 @@ class Board(object):
         piece = self.get_piece(x, y)
         pieces = [
             [
-               u"r", u"n", u"b", u"q", u"k", u"p"
+               "r", "n", "b", "q", "k", "p"
             ],
             [
-                u"R", u"N", u"B", u"Q", u"K", u"P"
+                "R", "N", "B", "Q", "K", "P"
             ]
         ]
 
         try:
             idx = pieces[stm].index(piece)
-        except ValueError, ve:
+        except ValueError as ve:
             return False
 
         return True
@@ -103,8 +101,8 @@ class Board(object):
         # loop through the board squares and set the pieces
         # x, y = 0, 0 is the top left square of the board
         #
-        for x in xrange(8):
-            for y in xrange(8):
+        for x in range(8):
+            for y in range(8):
                 gv.gui.get_event_box(x, y).queue_draw()
 
     #
@@ -167,8 +165,8 @@ class Board(object):
                 try:
                     lastmove = self.chessboard.peek()
                 except IndexError:
-                    lastmove = u""
-                if lastmove != u"":
+                    lastmove = ""
+                if lastmove != "":
                     sqnum = chess.square(x, y)
                     if sqnum in (lastmove.from_square, lastmove.to_square):
                         hilite = True
@@ -193,7 +191,7 @@ class Board(object):
             cr.set_source_rgb(r, g, b)
             cr.rectangle(1, 1 , a.width-LINEWIDTH, a.height-LINEWIDTH)
             cr.fill()
-        if piece == u"None":
+        if piece == "None":
             return
         # set offset so piece is centered in the square
         cr.translate(a.width*(1.0-SCALE)/2.0, a.height*(1.0-SCALE)/2.0)
@@ -212,7 +210,7 @@ class Board(object):
 
     def get_piece(self, x, y):
         piece = self.chessboard.piece_at(chess.square(x, y))
-        piece = unicode(piece)   
+        piece = str(piece)   
         return piece
 
     def get_legal_moves(self):
@@ -225,8 +223,8 @@ class Board(object):
         return self.chessboard.pop()
         
     def print_board(self):
-        print u"board fen:",repr(self.chessboard)
-        print u"board:\n",self.chessboard
+        print("board fen:",repr(self.chessboard))
+        print("board:\n",self.chessboard)
         
     def is_gameover(self):
         if self.chessboard.is_game_over():
@@ -248,22 +246,22 @@ class Board(object):
         # if the movelist is positioned part way through the game then
         # we must redo all moves to get the full game
         redo_count = len(gv.jcchess.get_redolist())
-        for i in xrange(0, redo_count):
+        for i in range(0, redo_count):
             gv.jcchess.redo_move()
         
         game = chess.pgn.Game.from_board(self.chessboard)
         
         # if we did any redo moves then undo them now to get things back
         # the way they were
-        for i in xrange(0, redo_count):
+        for i in range(0, redo_count):
             gv.jcchess.undo_move()
 
-        game.headers[u"Event"] = u"Computer Chess Game"
-        game.headers[u"Site"] = socket.gethostname()
-        game.headers[u"Date"] = datetime.strftime(datetime.now(), u'%Y.%m.%d')  
-        game.headers[u"Round"] = u"-"
-        game.headers[u"White"] = gv.jcchess.get_player(WHITE)
-        game.headers[u"Black"] = gv.jcchess.get_player(BLACK)
+        game.headers["Event"] = "Computer Chess Game"
+        game.headers["Site"] = socket.gethostname()
+        game.headers["Date"] = datetime.strftime(datetime.now(), '%Y.%m.%d')  
+        game.headers["Round"] = "-"
+        game.headers["White"] = gv.jcchess.get_player(WHITE)
+        game.headers["Black"] = gv.jcchess.get_player(BLACK)
         return game
         
     def get_fen(self):

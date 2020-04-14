@@ -17,7 +17,6 @@
 #   along with jcchess.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from __future__ import absolute_import
 from gi.repository import Gtk
 from gi.repository import GObject
 import os
@@ -26,45 +25,45 @@ from .constants import WHITE, BLACK
 from . import gv
 
 
-class Engine_Debug(object):
+class Engine_Debug:
 
     engine_debug_ref = None
 
     def __init__(self):
         glade_dir = gv.jcchess.get_glade_dir()
-        self.glade_file = os.path.join(glade_dir, u"engine_debug.glade")
+        self.glade_file = os.path.join(glade_dir, "engine_debug.glade")
         Engine_Debug.engine_debug_ref = self
 
-        self.debug_text = u""
+        self.debug_text = ""
         self.window = None
 
     def clear_text(self, b):
-        self.tb.set_text(u"")
+        self.tb.set_text("")
 
     # send command to engine1 (white)
     def engine1_button_clicked(self, b):
 
         player = gv.jcchess.get_player(WHITE)
-        if player == u"Human" or player == u"jcchess":
+        if player == "Human" or player == "jcchess":
             GObject.idle_add(
                 self.add_to_log,
-                u"# command not sent - player 1 (white) is not a USI engine")
+                "# command not sent - player 1 (white) is not a USI engine")
             return
 
-        cmd = self.cmd_entry.get_text() + u"\n"
+        cmd = self.cmd_entry.get_text() + "\n"
         gv.usiw.command(cmd)
 
     # send command to engine2 (black)
     def engine2_button_clicked(self, b):
 
         player = gv.jcchess.get_player(BLACK)
-        if player == u"Human" or player == u"jcchess":
+        if player == "Human" or player == "jcchess":
             GObject.idle_add(
                 self.add_to_log,
-                u"# command not sent - player 2 (black) is not a USI engine")
+                "# command not sent - player 2 (black) is not a USI engine")
             return
 
-        cmd = self.cmd_entry.get_text() + u"\n"
+        cmd = self.cmd_entry.get_text() + "\n"
         gv.usib.command(cmd)
 
     # user has closed the window
@@ -74,7 +73,7 @@ class Engine_Debug(object):
         return True  # do not propagate to other handlers
 
     def add_to_log(self, msg):
-        msg = msg + u"\n"
+        msg = msg + "\n"
         try:
             # append to end of buffer
             end_iter = self.tb.get_end_iter()
@@ -102,15 +101,15 @@ class Engine_Debug(object):
         self.builder.add_from_file(self.glade_file)
         self.builder.connect_signals(self)
 
-        self.window = self.builder.get_object(u"engine_debug_window")
-        self.tv = self.builder.get_object(u"engine_debug_textview")
+        self.window = self.builder.get_object("engine_debug_window")
+        self.tv = self.builder.get_object("engine_debug_textview")
         self.tv.set_editable(False)
         self.tb = self.tv.get_buffer()
         self.tb.set_text(self.debug_text)
-        self.debug_text = u""
+        self.debug_text = ""
 
         # used to type commands and send them to the engine
-        self.cmd_entry = self.builder.get_object(u"engine_debug_entry")
+        self.cmd_entry = self.builder.get_object("engine_debug_entry")
 
         self.window.show_all()
 

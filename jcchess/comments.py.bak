@@ -17,7 +17,6 @@
 #   along with jcchess.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from __future__ import absolute_import
 from gi.repository import Gtk
 import os
 
@@ -25,14 +24,14 @@ import jcchess.move_list
 from . import gv
 
 
-class Comments(object):
+class Comments:
 
     comments_ref = None
 
     def __init__(self):
 
         glade_dir = gv.jcchess.get_glade_dir()
-        self.glade_file = os.path.join(glade_dir, u"comments.glade")
+        self.glade_file = os.path.join(glade_dir, "comments.glade")
         self.move_list = jcchess.move_list.get_ref()
 
         # create comments window
@@ -41,16 +40,16 @@ class Comments(object):
         self.builder.add_from_file(self.glade_file)
         self.builder.connect_signals(self)
 
-        self.window = self.builder.get_object(u"comments_window")
+        self.window = self.builder.get_object("comments_window")
         self.window.hide()
 
         self.moveno = 0  # the moveno the comment applies to
 
-        tv = self.builder.get_object(u"comments_textview")
+        tv = self.builder.get_object("comments_textview")
         tv.set_editable(True)
         tv.set_wrap_mode(Gtk.WrapMode.WORD)
         self.tb = tv.get_buffer()
-        self.tb.connect(u"changed", self.text_changed)
+        self.tb.connect("changed", self.text_changed)
         self.comment_list = []
 
     # user has closed the window
@@ -75,7 +74,7 @@ class Comments(object):
             max = self.moveno
         # extend comment list if it is shorter than movelist
         while len(self.comment_list) <= max:
-            self.comment_list.append(u"")
+            self.comment_list.append("")
 
         # get current text from comments window
         start_iter = self.tb.get_start_iter()
@@ -95,7 +94,7 @@ class Comments(object):
             gv.gui.comment_view.get_buffer().insert(start,text)
 
         # show the moveno the comment relates to in the window title
-        self.window.set_title(_(u"Comment for Move ") + gv.jcchess.convert_move(moveno))
+        self.window.set_title(_("Comment for Move ") + gv.jcchess.convert_move(moveno))
 
         # self.moveno = moveno
     def get_comment_text(self,moveno):
@@ -107,17 +106,17 @@ class Comments(object):
             max = self.moveno
         # extend comment list if it is shorter than movelist
         while len(self.comment_list) <= max:
-            self.comment_list.append(u"")        
+            self.comment_list.append("")        
         # extend comment list if it is shorter than movelist
         while len(self.comment_list) <= self.moveno:
-            self.comment_list.append(u"")
+            self.comment_list.append("")
 
         # save it
         # print "saving to move;",self.moveno
         # print "text=",text
         text1 = self.comment_list[self.moveno]
         self.comment_list[self.moveno] = text1 + text  #append comments
-        if text != u"":
+        if text != "":
             self.move_list.set_comment_ind(True)
         else:
             self.move_list.set_comment_ind(False)        
@@ -130,50 +129,50 @@ class Comments(object):
 
         # extend comment list if it is shorter than movelist
         while len(self.comment_list) <= self.moveno:
-            self.comment_list.append(u"")
+            self.comment_list.append("")
 
         # save it
         # print "saving to move;",self.moveno
         # print "text=",text
         self.comment_list[self.moveno] = text
-        if text != u"":
+        if text != "":
             self.move_list.set_comment_ind(True)
         else:
             self.move_list.set_comment_ind(False)
 
     # Clear the comment window when clear button is clicked
     def clear_button_clicked_cb(self, button):
-        text = u""
+        text = ""
         # extend comment list if it is shorter than movelist
         while len(self.comment_list) <= self.moveno:
-            self.comment_list.append(u"")
+            self.comment_list.append("")
         self.comment_list[self.moveno] = text
         self.tb.set_text(text)
         if gv.show_moves == True:
             start, end =gv.gui.comment_view.get_buffer().get_bounds()
             gv.gui.comment_view.get_buffer().delete(start,end)
-            gv.gui.comment_view.get_buffer().insert(start,u"-")        
+            gv.gui.comment_view.get_buffer().insert(start,"-")        
     # clear all comments.
     # Called from load_save.py when a new game is loaded
     def clear_comments(self):
         self.moveno = 0
-        self.comment_list = [u""]
-        self.tb.set_text(u"")
-        self.window.set_title(_(u"Comment for Move ") + u"0")
+        self.comment_list = [""]
+        self.tb.set_text("")
+        self.window.set_title(_("Comment for Move ") + "0")
         if gv.show_moves == True:
             start, end =gv.gui.comment_view.get_buffer().get_bounds()
             gv.gui.comment_view.get_buffer().delete(start,end)
-            gv.gui.comment_view.get_buffer().insert(start,u"-")           
+            gv.gui.comment_view.get_buffer().insert(start,"-")           
     # called by load_save.py when loading file in PSN format
     def set_comment(self, moveno, comment):
         while len(self.comment_list) <= moveno:
-            self.comment_list.append(u"")
+            self.comment_list.append("")
         self.comment_list[moveno] = comment
 
     # called by load_save.py when saving file in PSN format
     def get_comment(self, moveno):
         while len(self.comment_list) <= moveno:
-            self.comment_list.append(u"")
+            self.comment_list.append("")
         return self.comment_list[moveno]
 
     # called by load_save.py when saving file to check if there are

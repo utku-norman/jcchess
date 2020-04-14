@@ -17,13 +17,12 @@
 #   along with gchess.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from __future__ import absolute_import
 import sys
 
 # Global variables
 
 # gettext/locale translation domain
-domain = u"jcchess"
+domain = "jcchess"
 
 # set in run.py
 installed = True
@@ -31,11 +30,11 @@ installed = True
 # set in gchess.py
 verbose = False
 verbose_uci = False
-lastdir = u""
-event = u""
-gamedate = u""
-gote = u""
-sente = u""
+lastdir = ""
+event = ""
+gamedate = ""
+gote = ""
+sente = ""
 
 # references to classes that have one instance
 jcchess = None
@@ -59,6 +58,6 @@ def testnames():
     names = dir(modulename)
     for n in names:
         if n not in initial_namelist:
-            print u"unknown global variable in gv.py:  ",  n
+            print("unknown global variable in gv.py:  ",  n  )
 initial_namelist = None     # don't remove this line
 initial_namelist = dir()

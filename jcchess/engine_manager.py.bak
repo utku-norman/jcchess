@@ -17,7 +17,6 @@
 #   along with jcchess.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from __future__ import absolute_import
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
@@ -29,7 +28,7 @@ from .constants import WHITE, BLACK
 from . import gv
 
 
-class Engine_Manager(object):
+class Engine_Manager:
 
     def __init__(self):
         # engine list is list of (name, path) pairs
@@ -38,26 +37,26 @@ class Engine_Manager(object):
         self.hash_value = 256
         self.ponder = False
         # bundled engines directory
-        self.bedir = os.path.join(os.path.dirname(utils.get_prefix()), u"engines")
+        self.bedir = os.path.join(os.path.dirname(utils.get_prefix()), "engines")
 
     def common_settings(self, b):
 
         glade_dir = gv.jcchess.get_glade_dir()
         self.glade_file = os.path.join(glade_dir,
-                                       u"common_engine_settings.glade")
+                                       "common_engine_settings.glade")
         self.builder = Gtk.Builder()
         self.builder.set_translation_domain(gv.domain)
         self.builder.add_from_file(self.glade_file)
         self.builder.connect_signals(self)
 
-        dialog = self.builder.get_object(u"common_engine_settings")
+        dialog = self.builder.get_object("common_engine_settings")
         dialog.set_transient_for(gv.gui.get_window())
         # ponder check button
-        checkbutton = self.builder.get_object(u"ponderbutton")
+        checkbutton = self.builder.get_object("ponderbutton")
         checkbutton.set_active(self.ponder)
 
         # hash value
-        adj = self.builder.get_object(u"adjustment1")
+        adj = self.builder.get_object("adjustment1")
         adj.set_value(self.hash_value)
         adj.set_lower(0.00)
         adj.set_upper(10000.00)
@@ -92,7 +91,7 @@ class Engine_Manager(object):
         engine_list = self.get_engine_list()
 
         dialog = Gtk.Dialog(
-            _(u"Engines"), gv.gui.get_window(), 0,
+            _("Engines"), gv.gui.get_window(), 0,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK,
              Gtk.ResponseType.OK)
         )
@@ -110,16 +109,16 @@ class Engine_Manager(object):
         al.show()
 
         buttons = (
-            _(u"Move to Top"),
-            _(u"Move Up"),
-            _(u"Move Down"),
-            _(u"Move to Bottom")
+            _("Move to Top"),
+            _("Move Up"),
+            _("Move Down"),
+            _("Move to Bottom")
             )
         for label in buttons:            
             button = Gtk.Button(label)
             button.show()
             lbb.add(button)
-            button.connect(u"clicked", self.move_engine, u"move engine")
+            button.connect("clicked", self.move_engine, "move engine")
 
         hb.pack_start(al, False, True, 10)
         
@@ -128,7 +127,7 @@ class Engine_Manager(object):
         sw.show()
         fr = Gtk.Frame()
         fr.show()
-        liststore = Gtk.ListStore(unicode, unicode)
+        liststore = Gtk.ListStore(str, str)
         for e in engine_list:
             engine_name, path, ucioptions = e
             #liststore.append(e)
@@ -137,11 +136,11 @@ class Engine_Manager(object):
 
         treeview = Gtk.TreeView(liststore)
         self.treeview = treeview
-        tvcolumn = Gtk.TreeViewColumn(_(u"Select an Engine:"))
+        tvcolumn = Gtk.TreeViewColumn(_("Select an Engine:"))
         treeview.append_column(tvcolumn)
         cell = Gtk.CellRendererText()
         # cell.set_property("cell-background", Gdk.color_parse("#F8F8FF"))
-        cell.set_property(u"cell-background-gdk", Gdk.color_parse(u"#F8F8FF"))
+        cell.set_property("cell-background-gdk", Gdk.color_parse("#F8F8FF"))
         tvcolumn.pack_start(cell, True)
         tvcolumn.set_min_width(200)
         tvcolumn.set_attributes(cell, text=0)
@@ -151,7 +150,7 @@ class Engine_Manager(object):
         hb.pack_start(fr, True, True, 10)
 
         # right side buttons
-        treeview.connect(u"button-press-event", self.engine_changed)
+        treeview.connect("button-press-event", self.engine_changed)
         bb = Gtk.VButtonBox()
         bb.set_layout(Gtk.ButtonBoxStyle.START)
         bb.show()
@@ -160,30 +159,30 @@ class Engine_Manager(object):
         al.add(bb)
         al.show()
 
-        add_button = Gtk.Button(_(u"Add"))
+        add_button = Gtk.Button(_("Add"))
         add_button.show()
         bb.add(add_button)
-        add_button.connect(u"clicked", self.add_engine, u"add engine")
+        add_button.connect("clicked", self.add_engine, "add engine")
 
-        self.delete_button = Gtk.Button(_(u"Delete"))
+        self.delete_button = Gtk.Button(_("Delete"))
         self.delete_button.set_sensitive(False)
         self.delete_button.show()
         bb.add(self.delete_button)
-        self.delete_button.connect(u"clicked",
-                                   self.delete_engine, u"delete engine")
+        self.delete_button.connect("clicked",
+                                   self.delete_engine, "delete engine")
 
-        self.rename_button = Gtk.Button(_(u"Rename"))
+        self.rename_button = Gtk.Button(_("Rename"))
         self.rename_button.set_sensitive(False)
         self.rename_button.show()
         bb.add(self.rename_button)
-        self.rename_button.connect(u"clicked",
-                                   self.rename_engine, u"rename engine")
+        self.rename_button.connect("clicked",
+                                   self.rename_engine, "rename engine")
                                    
-        self.configure_button = Gtk.Button(_(u"Configure"))
+        self.configure_button = Gtk.Button(_("Configure"))
         self.configure_button.show()
         bb.add(self.configure_button)
-        self.configure_button.connect(u"clicked",
-                             self.configure_engine, u"configure engine")
+        self.configure_button.connect("clicked",
+                             self.configure_engine, "configure engine")
 
         hb.pack_start(al, False, True, 10)
 
@@ -245,32 +244,32 @@ class Engine_Manager(object):
         lso, l_iter = ts.get_selected()
         tm = self.treeview.get_model()
         if l_iter is None:
-            gv.gui.info_box(_(u"no engine selected"))
+            gv.gui.info_box(_("no engine selected"))
             return
 
-        if widget.get_label() == _(u"Move to Top"):
+        if widget.get_label() == _("Move to Top"):
             self.liststore.move_after(l_iter, None)
-        elif widget.get_label() == _(u"Move Up"):
+        elif widget.get_label() == _("Move Up"):
             iter_prev = tm.iter_previous(l_iter)
             if iter_prev is not None:
                 self.liststore.swap(l_iter, iter_prev)
-        elif widget.get_label() == _(u"Move Down"):
+        elif widget.get_label() == _("Move Down"):
             iter_next = tm.iter_next(l_iter)
             if iter_next is not None:
                 self.liststore.swap(l_iter, iter_next)
-        elif widget.get_label() == _(u"Move to Bottom"):
+        elif widget.get_label() == _("Move to Bottom"):
             self.liststore.move_before(l_iter, None)
 
     def add_engine(self, widget, data=None):
         dialog = Gtk.FileChooserDialog(
-            _(u"Add UCI Engine.."),
+            _("Add UCI Engine.."),
             gv.gui.get_window(),
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
         )
         dialog.set_default_response(Gtk.ResponseType.OK)
-        dialog.set_current_folder(os.path.expanduser(u"~"))
+        dialog.set_current_folder(os.path.expanduser("~"))
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
@@ -278,11 +277,11 @@ class Engine_Manager(object):
             # print "attempting to add new engine"
             path = dialog.get_filename()
             # use a new uci object so not to mess with main game engine
-            u = uci.Uci(u"0")
-            u.set_engine(u"addengine", path)
+            u = uci.Uci("0")
+            u.set_engine("addengine", path)
             errmsg, name = u.test_engine(path)
-            if errmsg != u"":
-                err_dialog = Gtk.Dialog(_(u"Error Adding Engine"), None, 0,
+            if errmsg != "":
+                err_dialog = Gtk.Dialog(_("Error Adding Engine"), None, 0,
                                         (Gtk.STOCK_OK, Gtk.ResponseType.OK))
                 err_dialog.set_default_size(380, -1)
                 lbl = Gtk.Label(label=errmsg)
@@ -305,7 +304,7 @@ class Engine_Manager(object):
     # or from gui.py by selecting configure engine from menu
     def configure_engine(self, widget, data=None):
         # button was clicked
-        if widget.get_name() == u"GtkButton":
+        if widget.get_name() == "GtkButton":
             ts = self.treeview.get_selection()
 
             # get liststore object/iter
@@ -313,19 +312,19 @@ class Engine_Manager(object):
             tm = self.treeview.get_model()
 
             if l_iter is None:
-                gv.gui.info_box(_(u"no engine selected"))
+                gv.gui.info_box(_("no engine selected"))
                 return
 
             name = tm.get_value(l_iter, 0)
             path = tm.get_value(l_iter, 1)
-            u = uci.Uci(u"1")
+            u = uci.Uci("1")
             u.set_engine(name, path)
             #u.start_engine(path)
             u.UCI_options()
             return
 
         # configure engine menu item was selected    
-        if widget.get_name() == u"ConfigureEngine1":
+        if widget.get_name() == "ConfigureEngine1":
             player = WHITE
             uciref = gv.uciw
         else:
@@ -333,8 +332,8 @@ class Engine_Manager(object):
             uciref = gv.ucib
 
         # If not an engine return
-        if gv.jcchess.get_player(player) == u"Human":
-            gv.gui.info_box(_(u"No options to configure"))
+        if gv.jcchess.get_player(player) == "Human":
+            gv.gui.info_box(_("No options to configure"))
             return
             
         uciref.UCI_options()
@@ -348,7 +347,7 @@ class Engine_Manager(object):
         tm = self.treeview.get_model()
 
         if l_iter is None:
-            gv.gui.info_box(_(u"no engine selected"))
+            gv.gui.info_box(_("no engine selected"))
             return
 
         name = tm.get_value(l_iter, 0)
@@ -365,7 +364,7 @@ class Engine_Manager(object):
         # then change that player to human    
         for side in (WHITE, BLACK):
             if name == gv.jcchess.get_player(side):
-                gv.jcchess.set_player(side, u"Human")
+                gv.jcchess.set_player(side, "Human")
 
     def rename_engine(self, widget, data=None):
 
@@ -376,7 +375,7 @@ class Engine_Manager(object):
         tm = self.treeview.get_model()
 
         if l_iter is None:
-            gv.gui.info_box(_(u"no engine selected"))
+            gv.gui.info_box(_("no engine selected"))
             return
 
         name = tm.get_value(l_iter, 0)
@@ -389,7 +388,7 @@ class Engine_Manager(object):
             Gtk.ButtonsType.OK_CANCEL,
             None)
 
-        markup = u"<b>" + _(u"Rename Engine") + u"</b>"
+        markup = "<b>" + _("Rename Engine") + "</b>"
         dialog.set_markup(markup)
 
         # create the text input fields
@@ -399,7 +398,7 @@ class Engine_Manager(object):
         entry.set_width_chars(30)
 
         tbl = Gtk.Table(1, 2, True)
-        tbl.attach(Gtk.Label(label=_(u"Engine Name: ")), 0, 1, 0, 1)
+        tbl.attach(Gtk.Label(label=_("Engine Name: ")), 0, 1, 0, 1)
         tbl.attach(entry, 1, 2, 0, 1)
 
         dialog.vbox.add(tbl)

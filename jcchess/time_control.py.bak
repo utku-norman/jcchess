@@ -17,8 +17,6 @@
 #   along with jcchess.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from __future__ import division
-from __future__ import absolute_import
 from gi.repository import Gtk
 import time
 
@@ -26,7 +24,7 @@ from . import gv
 from .constants import WHITE, BLACK
 
 
-class Time_Control(object):
+class Time_Control:
 
     def __init__(self):
 
@@ -58,7 +56,7 @@ class Time_Control(object):
     def init_cls_settings(self):
         self.cls_max_sessions = 3
         self.cls_settings = []
-        for i in xrange(0, self.cls_max_sessions):
+        for i in range(0, self.cls_max_sessions):
             moves_to_go = 40
             minutes = 5
             if i == 0:
@@ -83,7 +81,7 @@ class Time_Control(object):
             self.cls_bsession = 0
             self.cls_wsession = 0
             # set session to first with non-zero repeat value
-            for i in xrange(0, self.cls_max_sessions):
+            for i in range(0, self.cls_max_sessions):
                 moves_to_go, mins, rep = self.cls_settings[i]
                 if rep != 0:
                     self.cls_bsession = i
@@ -160,21 +158,21 @@ class Time_Control(object):
     #
     def time_control(self, b):
         dialog = Gtk.Dialog(
-            u"Time Control", gv.gui.get_window(), 0,
+            "Time Control", gv.gui.get_window(), 0,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK,
              Gtk.ResponseType.OK))
-        dialog.set_title(u"Time Control")
+        dialog.set_title("Time Control")
         dialog.vbox.set_spacing(20)
 
         # list of time control types
         combobox = Gtk.ComboBoxText()
         #combobox.append_text("Byoyomi")
-        combobox.append_text(u"Classical")
-        combobox.append_text(u"Incremental")
-        combobox.append_text(u"Fixed Time Per Move")
-        combobox.append_text(u"Fixed Search Depth")
-        combobox.append_text(u"Infinite Search")
-        combobox.append_text(u"Nodes")
+        combobox.append_text("Classical")
+        combobox.append_text("Incremental")
+        combobox.append_text("Fixed Time Per Move")
+        combobox.append_text("Fixed Search Depth")
+        combobox.append_text("Infinite Search")
+        combobox.append_text("Nodes")
         combobox.set_active(self.type-1)
 
         al = Gtk.Alignment.new(xalign=0.0, yalign=1.0, xscale=0.0, yscale=0.5)
@@ -184,7 +182,7 @@ class Time_Control(object):
         dialog.vbox.pack_start(al, False, True, 5)
         self.combobox = combobox
 
-        dialog.connect(u"draw", self.dialog_expose_event)
+        dialog.connect("draw", self.dialog_expose_event)
 
         #
         # settings for the byoyomi time control type
@@ -195,9 +193,9 @@ class Time_Control(object):
         #
 
         # list of time control vboxes. 1 per time control type
-        self.tcvb = [Gtk.VBox(False, 0) for x in xrange(8)]
+        self.tcvb = [Gtk.VBox(False, 0) for x in range(8)]
 
-        byo_frame1 = Gtk.Frame.new(u"Available Time")
+        byo_frame1 = Gtk.Frame.new("Available Time")
         vb = Gtk.VBox(False, 0)
         byo_frame1.add(vb)
 
@@ -212,7 +210,7 @@ class Time_Control(object):
         al = Gtk.Alignment.new(xalign=1.0, yalign=0.0, xscale=0.0, yscale=0.0)
         al.add(spinner)
         hb = Gtk.HBox(False, 0)
-        hb.pack_start(Gtk.Label(u"Hours:"), False, False, 0)
+        hb.pack_start(Gtk.Label("Hours:"), False, False, 0)
         hb.pack_start(al, True, True, 10)
         vb.pack_start(hb, False, True, 0)
 
@@ -226,14 +224,14 @@ class Time_Control(object):
         spinner = Gtk.SpinButton.new(byo_adj_mins, 1.0, 0)
         al = Gtk.Alignment.new(xalign=1.0, yalign=0.0, xscale=0.0, yscale=0.0)
         al.add(spinner)
-        lbl = Gtk.Label(label=u"Minutes :")
+        lbl = Gtk.Label(label="Minutes :")
         hb = Gtk.HBox(False, 0)
         hb.pack_start(lbl, False, False, 0)
         hb.pack_start(al, True, True, 10)
         vb.pack_start(hb, False, True, 0)
 
         # byoyomi - seconds
-        byo_frame2 = Gtk.Frame.new(u"Byoyomi")
+        byo_frame2 = Gtk.Frame.new("Byoyomi")
         minimum = 0
         maximum = 60
         default = self.byo_byoyomi
@@ -244,7 +242,7 @@ class Time_Control(object):
         al = Gtk.Alignment.new(xalign=1.0, yalign=0.0, xscale=0.0, yscale=0.0)
         al.add(spinner)
         hb = Gtk.HBox(False, 0)
-        hb.pack_start(Gtk.Label(u"Seconds:"), False, False, 0)
+        hb.pack_start(Gtk.Label("Seconds:"), False, False, 0)
         hb.pack_start(al, True, True, 10)
         byo_frame2.add(hb)
 
@@ -266,7 +264,7 @@ class Time_Control(object):
 
         adj_cls_settings = []
 
-        for i in xrange(0, self.cls_max_sessions):
+        for i in range(0, self.cls_max_sessions):
 
             (moves_to_go, minutes, repeat_times) = self.cls_settings[i]
 
@@ -274,7 +272,7 @@ class Time_Control(object):
             hb = Gtk.HBox(False, 0)
             if i != 0:
                 vb.pack_start(Gtk.HSeparator(), False, True, 0)
-            hb.pack_start(Gtk.Label(u"#" + unicode(i + 1)), False, False, 0)
+            hb.pack_start(Gtk.Label("#" + str(i + 1)), False, False, 0)
             # if i != 0:
             #   hb.pack_start(Gtk.CheckButton(, True, True, 0), True, True, 10)
             vb.pack_start(hb, False, True, 0)
@@ -296,7 +294,7 @@ class Time_Control(object):
                 xalign=1.0, yalign=0.0, xscale=0.0, yscale=0.0)
             al.add(spinner)
             hb = Gtk.HBox(False, 0)
-            hb.pack_start(Gtk.Label(u"Moves:"), False, False, 0)
+            hb.pack_start(Gtk.Label("Moves:"), False, False, 0)
             hb.pack_start(al, True, True, 10)
             vb.pack_start(hb, False, True, 0)
 
@@ -316,7 +314,7 @@ class Time_Control(object):
             al = Gtk.Alignment.new(
                 xalign=1.0, yalign=0.0, xscale=0.0, yscale=0.0)
             al.add(spinner)
-            lbl = Gtk.Label(label=u"Minutes :")
+            lbl = Gtk.Label(label="Minutes :")
             hb = Gtk.HBox(False, 0)
             hb.pack_start(lbl, False, False, 0)
             hb.pack_start(al, True, True, 10)
@@ -337,7 +335,7 @@ class Time_Control(object):
             al = Gtk.Alignment.new(
                 xalign=1.0, yalign=0.0, xscale=0.0, yscale=0.0)
             al.add(spinner)
-            lbl = Gtk.Label(label=u"Count :")
+            lbl = Gtk.Label(label="Count :")
             hb = Gtk.HBox(False, 0)
             hb.pack_start(lbl, False, False, 0)
             hb.pack_start(al, True, True, 10)
@@ -363,7 +361,7 @@ class Time_Control(object):
         # go wtime 130591 btime 118314 winc 6000 binc 6000
         # go wtime 135329 btime 118947 winc 6000 binc 6000
 
-        inc_frame1 = Gtk.Frame.new(u"Time")
+        inc_frame1 = Gtk.Frame.new("Time")
         vb = Gtk.VBox(False, 0)
         inc_frame1.add(vb)
 
@@ -378,7 +376,7 @@ class Time_Control(object):
         al = Gtk.Alignment.new(xalign=1.0, yalign=0.0, xscale=0.0, yscale=0.0)
         al.add(spinner)
         hb = Gtk.HBox(False, 0)
-        hb.pack_start(Gtk.Label(u"Hours:"), False, False, 0)
+        hb.pack_start(Gtk.Label("Hours:"), False, False, 0)
         hb.pack_start(al, True, True, 10)
         vb.pack_start(hb, False, True, 0)
 
@@ -392,14 +390,14 @@ class Time_Control(object):
         spinner = Gtk.SpinButton.new(inc_adj_mins, 1.0, 0)
         al = Gtk.Alignment.new(xalign=1.0, yalign=0.0, xscale=0.0, yscale=0.0)
         al.add(spinner)
-        lbl = Gtk.Label(label=u"Minutes :")
+        lbl = Gtk.Label(label="Minutes :")
         hb = Gtk.HBox(False, 0)
         hb.pack_start(lbl, False, False, 0)
         hb.pack_start(al, True, True, 10)
         vb.pack_start(hb, False, True, 0)
 
         # bonus time per move - seconds
-        inc_frame2 = Gtk.Frame.new(u"Bonus Time per Move")
+        inc_frame2 = Gtk.Frame.new("Bonus Time per Move")
         minimum = 0
         maximum = 60
         default = self.inc_bonus
@@ -410,7 +408,7 @@ class Time_Control(object):
         al = Gtk.Alignment.new(xalign=1.0, yalign=0.0, xscale=0.0, yscale=0.0)
         al.add(spinner)
         hb = Gtk.HBox(False, 0)
-        hb.pack_start(Gtk.Label(u"Seconds:"), False, False, 0)
+        hb.pack_start(Gtk.Label("Seconds:"), False, False, 0)
         hb.pack_start(al, True, True, 10)
         inc_frame2.add(hb)
 
@@ -441,7 +439,7 @@ class Time_Control(object):
         spinner = Gtk.SpinButton.new(adj_ftpm_secs, 1.0, 0)
         al = Gtk.Alignment.new(xalign=1.0, yalign=0.0, xscale=0.0, yscale=0.0)
         al.add(spinner)
-        lbl = Gtk.Label(label=u"Seconds :")
+        lbl = Gtk.Label(label="Seconds :")
         hb = Gtk.HBox(False, 0)
         hb.pack_start(lbl, False, False, 0)
         hb.pack_start(al, True, True, 10)
@@ -470,7 +468,7 @@ class Time_Control(object):
         spinner = Gtk.SpinButton.new(adj_dpth_depth, 1.0, 0)
         al = Gtk.Alignment.new(xalign=1.0, yalign=0.0, xscale=0.0, yscale=0.0)
         al.add(spinner)
-        lbl = Gtk.Label(label=u"Search Depth :")
+        lbl = Gtk.Label(label="Search Depth :")
         hb = Gtk.HBox(False, 0)
         hb.pack_start(lbl, False, False, 0)
         hb.pack_start(al, True, True, 10)
@@ -484,7 +482,7 @@ class Time_Control(object):
 
         # there are no cutomisable options for go infinite
         self.tcvb[5].pack_start(
-            Gtk.Label(u"No customisable options"), True, True, 0)
+            Gtk.Label("No customisable options"), True, True, 0)
 
         #
         # settings for the fixed no. of nodes time control type
@@ -507,7 +505,7 @@ class Time_Control(object):
         spinner = Gtk.SpinButton.new(adj_nodes_nodes, 1.0, 0)
         al = Gtk.Alignment.new(xalign=1.0, yalign=0.0, xscale=0.0, yscale=0.0)
         al.add(spinner)
-        lbl = Gtk.Label(label=u"No. of Nodes to Search :")
+        lbl = Gtk.Label(label="No. of Nodes to Search :")
         hb = Gtk.HBox(False, 0)
         hb.pack_start(lbl, False, False, 0)
         hb.pack_start(al, True, True, 10)
@@ -526,7 +524,7 @@ class Time_Control(object):
         self.al.add(self.tcvb[self.type])
         dialog.vbox.pack_start(self.al, False, True, 0)
 
-        combobox.connect(u"changed", self.tc_method_changed, dialog)
+        combobox.connect("changed", self.tc_method_changed, dialog)
 
         dialog.set_default_response(Gtk.ResponseType.OK)
         dialog.show_all()
@@ -548,7 +546,7 @@ class Time_Control(object):
                 byo_minutes = int(byo_adj_mins.get_value())
                 byo_byoyomi = int(byo_adj_byoyomi.get_value())
                 if byo_hours == 0 and byo_minutes == 0 and byo_byoyomi == 0:
-                    gv.gui.info_box(u"Time fields cannot all be zero!")
+                    gv.gui.info_box("Time fields cannot all be zero!")
                 else:
                     # input ok - exit loop
                     self.byo_hours = byo_hours
@@ -564,14 +562,14 @@ class Time_Control(object):
             elif self.type == 1:
                 self.cls_settings = []
                 rep_zero = True
-                for i in xrange(0, self.cls_max_sessions):
+                for i in range(0, self.cls_max_sessions):
                     moves_to_go, mins, rep = adj_cls_settings[i]
                     if rep.get_value() != 0:
                         rep_zero = False
                 if rep_zero:
-                    gv.gui.info_box(u"Count fields cannot all be zero!")
+                    gv.gui.info_box("Count fields cannot all be zero!")
                 else:
-                    for i in xrange(0, self.cls_max_sessions):
+                    for i in range(0, self.cls_max_sessions):
                         moves_to_go, mins, rep = adj_cls_settings[i]
                         self.cls_settings.append((
                             moves_to_go.get_value(), mins.get_value(),
@@ -590,7 +588,7 @@ class Time_Control(object):
                 inc_bonus = int(inc_adj_bonus.get_value())
                 if inc_hours == 0 and inc_minutes == 0 and inc_bonus == 0:
                     gv.gui.info_box(
-                        u"Incremental Time fields cannot all be zero!")
+                        "Incremental Time fields cannot all be zero!")
                 else:
                     # input ok - exit loop
                     self.inc_hours = inc_hours
@@ -788,42 +786,42 @@ class Time_Control(object):
             btime = self.btime
             wtime = self.wtime
             byoyomi = self.byo_byoyomi * 1000
-            cmd = (u"go btime " + unicode(btime) + u" wtime " + unicode(wtime) +
-                   u" byoyomi " + unicode(byoyomi))
+            cmd = ("go btime " + str(btime) + " wtime " + str(wtime) +
+                   " byoyomi " + str(byoyomi))
         # classical (e.g. 40 moves in 5 minutes)
         elif self.type == 1:
             if stm == WHITE:
-                cmd = (u"go btime " + unicode(self.btime) + u" wtime " +
-                       unicode(self.wtime) + u" movestogo " +
-                       unicode(self.wmoves_to_go))
+                cmd = ("go btime " + str(self.btime) + " wtime " +
+                       str(self.wtime) + " movestogo " +
+                       str(self.wmoves_to_go))
             else:
-                cmd = (u"go btime " + unicode(self.btime) + u" wtime " +
-                       unicode(self.wtime) + u" movestogo " +
-                       unicode(self.bmoves_to_go))
+                cmd = ("go btime " + str(self.btime) + " wtime " +
+                       str(self.wtime) + " movestogo " +
+                       str(self.bmoves_to_go))
         # incremental
         elif self.type == 2:
             # times in milliseconds
             btime = self.btime
             wtime = self.wtime
             bonus = self.inc_bonus * 1000
-            cmd = (u"go btime " + unicode(btime) + u" wtime " + unicode(wtime) +
-                   u" binc " + unicode(bonus) + u" winc " + unicode(bonus))
+            cmd = ("go btime " + str(btime) + " wtime " + str(wtime) +
+                   " binc " + str(bonus) + " winc " + str(bonus))
         # fixed time per move
         elif self.type == 3:
-            cmd = u"go movetime " + unicode(self.ftpm_seconds * 1000)
+            cmd = "go movetime " + str(self.ftpm_seconds * 1000)
         elif self.type == 4:
-            cmd = u"go depth " + unicode(self.dpth_depth)
+            cmd = "go depth " + str(self.dpth_depth)
         elif self.type == 5:
-            cmd = u"go infinite"
+            cmd = "go infinite"
         elif self.type == 6:
-            cmd = u"go nodes " + unicode(self.nodes_nodes)
+            cmd = "go nodes " + str(self.nodes_nodes)
         else:
             # times in milliseconds
             btime = self.btime
             wtime = self.wtime
             byoyomi = self.byo_byoyomi * 1000
-            cmd = (u"go btime " + unicode(btime) + u" wtime " + unicode(wtime) +
-                   u" byoyomi " + unicode(byoyomi))
+            cmd = ("go btime " + str(btime) + " wtime " + str(wtime) +
+                   " byoyomi " + str(byoyomi))
 
         return cmd
 
@@ -835,7 +833,7 @@ class Time_Control(object):
         #
         engine.depth(39)
         engine.nodes(0)
-        engine.command(u"level 0 59:59")
+        engine.command("level 0 59:59")
 
         # byoyomi
         if self.type == 0:
@@ -867,20 +865,20 @@ class Time_Control(object):
             gs_mins = int(gs_mins)
             gs_secs = int(gs_secs)
 
-            gs_mins_str = unicode(gs_mins)
-            gs_secs_str = unicode(gs_secs)
+            gs_mins_str = str(gs_mins)
+            gs_secs_str = str(gs_secs)
             if gs_mins < 10:
-                gs_mins_str = u"0" + gs_mins_str
+                gs_mins_str = "0" + gs_mins_str
             if gs_secs < 10:
-                gs_secs_str = u"0" + gs_secs_str
+                gs_secs_str = "0" + gs_secs_str
 
-            gs_level = gs_mins_str + u":" + gs_secs_str
+            gs_level = gs_mins_str + ":" + gs_secs_str
 
             if gv.verbose:
-                print (u"using byoyomi TC - wtime:", self.wtime, u", btime:",
-                      self.btime, u", byoyomi:", self.byo_byoyomi * 1000,
-                      u", stm:", stm, u", time for move (ms):", gs_movetime)
-            command = u"level 0 " + gs_level
+                print(("using byoyomi TC - wtime:", self.wtime, ", btime:",
+                      self.btime, ", byoyomi:", self.byo_byoyomi * 1000,
+                      ", stm:", stm, ", time for move (ms):", gs_movetime))
+            command = "level 0 " + gs_level
             # print "jcchess time limit:",command
 
             # e.g.
@@ -908,26 +906,26 @@ class Time_Control(object):
             gs_mins = int(gs_mins)
             gs_secs = int(gs_secs)
 
-            gs_mins_str = unicode(gs_mins)
-            gs_secs_str = unicode(gs_secs)
+            gs_mins_str = str(gs_mins)
+            gs_secs_str = str(gs_secs)
             if gs_mins < 10:
-                gs_mins_str = u"0" + gs_mins_str
+                gs_mins_str = "0" + gs_mins_str
             if gs_secs < 10:
-                gs_secs_str = u"0" + gs_secs_str
+                gs_secs_str = "0" + gs_secs_str
 
-            gs_level = gs_mins_str + u":" + gs_secs_str
+            gs_level = gs_mins_str + ":" + gs_secs_str
             if gv.verbose:
-                print (u"using classical TC - wtime:", self.wtime, u", btime:",
-                      self.btime, u", movestogo:", unicode(self.wmoves_to_go),
-                      u", stm:", stm, u", time for move (ms):", gs_movetime)
-                print (u"                   - ", unicode(self.wmoves_to_go),
-                      u" moves in ", gs_mins_str, u"minutes", gs_secs_str,
-                      u" seconds")
+                print(("using classical TC - wtime:", self.wtime, ", btime:",
+                      self.btime, ", movestogo:", str(self.wmoves_to_go),
+                      ", stm:", stm, ", time for move (ms):", gs_movetime))
+                print(("                   - ", str(self.wmoves_to_go),
+                      " moves in ", gs_mins_str, "minutes", gs_secs_str,
+                      " seconds"))
 
             if self.wmoves_to_go == 1:
-                command = u"level 0 " + gs_level
+                command = "level 0 " + gs_level
             else:
-                command = u"level " + unicode(self.wmoves_to_go) + u" " + gs_level
+                command = "level " + str(self.wmoves_to_go) + " " + gs_level
             engine.command(command)
         # incremental
         elif self.type == 2:
@@ -953,20 +951,20 @@ class Time_Control(object):
             if gs_mins <= 0 and gs_secs < 1:
                 gs_secs = 1
 
-            gs_mins_str = unicode(gs_mins)
-            gs_secs_str = unicode(gs_secs)
+            gs_mins_str = str(gs_mins)
+            gs_secs_str = str(gs_secs)
             if gs_mins < 10:
-                gs_mins_str = u"0" + gs_mins_str
+                gs_mins_str = "0" + gs_mins_str
             if gs_secs < 10:
-                gs_secs_str = u"0" + gs_secs_str
+                gs_secs_str = "0" + gs_secs_str
 
-            gs_level = gs_mins_str + u":" + gs_secs_str
+            gs_level = gs_mins_str + ":" + gs_secs_str
             if gv.verbose:
-                print (u"using incremental TC - wtime:", self.wtime, u", btime:",
-                      self.btime, u", winc/binc:", unicode(self.inc_bonus * 1000),
-                      u", stm:", stm, u", time for move (ms):", gs_movetime)
+                print(("using incremental TC - wtime:", self.wtime, ", btime:",
+                      self.btime, ", winc/binc:", str(self.inc_bonus * 1000),
+                      ", stm:", stm, ", time for move (ms):", gs_movetime))
 
-            command = u"level 0 " + gs_level
+            command = "level 0 " + gs_level
             engine.command(command)
         # fixed time per move
         elif self.type == 3:
@@ -983,41 +981,41 @@ class Time_Control(object):
             if gs_mins <= 0 and gs_secs < 1:
                 gs_secs = 1
 
-            gs_mins_str = unicode(gs_mins)
-            gs_secs_str = unicode(gs_secs)
+            gs_mins_str = str(gs_mins)
+            gs_secs_str = str(gs_secs)
             if gs_mins < 10:
-                gs_mins_str = u"0" + gs_mins_str
+                gs_mins_str = "0" + gs_mins_str
             if gs_secs < 10:
-                gs_secs_str = u"0" + gs_secs_str
+                gs_secs_str = "0" + gs_secs_str
 
-            gs_level = gs_mins_str + u":" + gs_secs_str
+            gs_level = gs_mins_str + ":" + gs_secs_str
             if gv.verbose:
-                print (u"using fixed time per move TC - wtime:", self.wtime,
-                      u", btime:", self.btime, u" stm:", stm,
-                      u", time for move (ms):", gs_movetime)
+                print(("using fixed time per move TC - wtime:", self.wtime,
+                      ", btime:", self.btime, " stm:", stm,
+                      ", time for move (ms):", gs_movetime))
 
-            command = u"level 0 " + gs_level
+            command = "level 0 " + gs_level
             engine.command(command)
         # fixed search depth
         elif self.type == 4:
             idepth = self.dpth_depth
             if idepth > 39:
                 if gv.verbose:
-                    print (u"search depth (", idepth,
-                          u") exceeds max for jcchess engine, setting to 39")
+                    print(("search depth (", idepth,
+                          ") exceeds max for jcchess engine, setting to 39"))
                 idepth = 39
             if gv.verbose:
-                print u"setting depth for jcchess engine to", idepth
+                print("setting depth for jcchess engine to", idepth)
             engine.depth(idepth)
         # fixed nodes search
         elif self.type == 6:
             inodes = self.nodes_nodes
 
             if gv.verbose:
-                print u"setting nodes for jcchess engine to", inodes
-                print u"time=", time.time()
+                print("setting nodes for jcchess engine to", inodes)
+                print("time=", time.time())
             engine.nodes(inodes)
-            command = u"level 0 59:59"
+            command = "level 0 59:59"
             engine.command(command)
 
     def update_gui_time_control(self, stm):
@@ -1035,7 +1033,7 @@ class Time_Control(object):
         elif tc_type == 4 or tc_type == 5 or tc_type == 6:
             self.set_toolbar_time_control4(move_time, stm)
         else:
-            print u"invalid tc type", tc_type
+            print("invalid tc type", tc_type)
 
     # update gui clock for byoyomi TC
     def set_toolbar_time_control0(self, move_time, side_to_move):
@@ -1072,26 +1070,26 @@ class Time_Control(object):
         byoyomi = int(byoyomi / 1000)
         byo = int(byo / 1000)
 
-        shours = unicode(hours)
+        shours = str(hours)
         if len(shours) < 2:
-            shours = u"0" + shours
+            shours = "0" + shours
 
-        smins = unicode(mins)
+        smins = str(mins)
         if len(smins) < 2:
-            smins = u"0" + smins
+            smins = "0" + smins
 
-        ssecs = unicode(secs)
+        ssecs = str(secs)
         if len(ssecs) < 2:
-            ssecs = u"0" + ssecs
+            ssecs = "0" + ssecs
 
-        sbyo = unicode(byo)
+        sbyo = str(byo)
         if len(sbyo) < 2:
-            sbyo = u"0" + sbyo
-        sbyoyomi = unicode(byoyomi)
+            sbyo = "0" + sbyo
+        sbyoyomi = str(byoyomi)
         if len(sbyoyomi) < 2:
-            sbyoyomi = u"0" + sbyoyomi
+            sbyoyomi = "0" + sbyoyomi
 
-        txt = shours + u":" + smins + u":" + ssecs + u"  " + sbyo + u"/" + sbyoyomi
+        txt = shours + ":" + smins + ":" + ssecs + "  " + sbyo + "/" + sbyoyomi
         gv.gui.set_toolbar_time_control(txt, side_to_move)
 
     # update gui clock for classical TC
@@ -1117,19 +1115,19 @@ class Time_Control(object):
             mins = int(secs / 60)
             secs = int(secs - (mins * 60))
 
-        shours = unicode(hours)
+        shours = str(hours)
         if len(shours) < 2:
-            shours = u"0" + shours
+            shours = "0" + shours
 
-        smins = unicode(mins)
+        smins = str(mins)
         if len(smins) < 2:
-            smins = u"0" + smins
+            smins = "0" + smins
 
-        ssecs = unicode(secs)
+        ssecs = str(secs)
         if len(ssecs) < 2:
-            ssecs = u"0" + ssecs
+            ssecs = "0" + ssecs
 
-        txt = shours + u":" + smins + u":" + ssecs + u" " + unicode(moves_to_go)
+        txt = shours + ":" + smins + ":" + ssecs + " " + str(moves_to_go)
         gv.gui.set_toolbar_time_control(txt, side_to_move)
 
     # update gui clock for incremental TC
@@ -1154,19 +1152,19 @@ class Time_Control(object):
             mins = int(secs / 60)
             secs = int(secs - (mins * 60))
 
-        shours = unicode(hours)
+        shours = str(hours)
         if len(shours) < 2:
-            shours = u"0" + shours
+            shours = "0" + shours
 
-        smins = unicode(mins)
+        smins = str(mins)
         if len(smins) < 2:
-            smins = u"0" + smins
+            smins = "0" + smins
 
-        ssecs = unicode(secs)
+        ssecs = str(secs)
         if len(ssecs) < 2:
-            ssecs = u"0" + ssecs
+            ssecs = "0" + ssecs
 
-        txt = shours + u":" + smins + u":" + ssecs
+        txt = shours + ":" + smins + ":" + ssecs
         gv.gui.set_toolbar_time_control(txt, side_to_move)
 
     # update gui clock for fixed time per move TC
@@ -1191,19 +1189,19 @@ class Time_Control(object):
             mins = int(secs / 60)
             secs = int(secs - (mins * 60))
 
-        shours = unicode(hours)
+        shours = str(hours)
         if len(shours) < 2:
-            shours = u"0" + shours
+            shours = "0" + shours
 
-        smins = unicode(mins)
+        smins = str(mins)
         if len(smins) < 2:
-            smins = u"0" + smins
+            smins = "0" + smins
 
-        ssecs = unicode(secs)
+        ssecs = str(secs)
         if len(ssecs) < 2:
-            ssecs = u"0" + ssecs
+            ssecs = "0" + ssecs
 
-        txt = shours + u":" + smins + u":" + ssecs
+        txt = shours + ":" + smins + ":" + ssecs
         gv.gui.set_toolbar_time_control(txt, side_to_move)
 
     # update gui clock for fixed search depth TC
@@ -1223,17 +1221,17 @@ class Time_Control(object):
             mins = int(secs / 60)
             secs = int(secs - (mins * 60))
 
-        shours = unicode(hours)
+        shours = str(hours)
         if len(shours) < 2:
-            shours = u"0" + shours
+            shours = "0" + shours
 
-        smins = unicode(mins)
+        smins = str(mins)
         if len(smins) < 2:
-            smins = u"0" + smins
+            smins = "0" + smins
 
-        ssecs = unicode(secs)
+        ssecs = str(secs)
         if len(ssecs) < 2:
-            ssecs = u"0" + ssecs
+            ssecs = "0" + ssecs
 
-        txt = shours + u":" + smins + u":" + ssecs
+        txt = shours + ":" + smins + ":" + ssecs
         gv.gui.set_toolbar_time_control(txt, side_to_move)

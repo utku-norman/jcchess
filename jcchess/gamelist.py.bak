@@ -17,20 +17,19 @@
 #   along with jcchess.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from __future__ import absolute_import
 from gi.repository import Gtk
 import os
 from . import gv
 
 
-class Gamelist(object):
+class Gamelist:
 
     gamelist_ref = None
 
     def __init__(self):
 
         glade_dir = gv.jcchess.get_glade_dir()
-        self.glade_file = os.path.join(glade_dir, u"gamelist.glade")
+        self.glade_file = os.path.join(glade_dir, "gamelist.glade")
 
         # create gamelist window
         self.builder = Gtk.Builder()
@@ -38,9 +37,9 @@ class Gamelist(object):
         self.builder.add_from_file(self.glade_file)
         self.builder.connect_signals(self)
 
-        self.window = self.builder.get_object(u"gamelist_window")
-        self.treeview = self.builder.get_object(u"gamelist_treeview")
-        self.liststore = self.builder.get_object(u"liststore1")
+        self.window = self.builder.get_object("gamelist_window")
+        self.treeview = self.builder.get_object("gamelist_treeview")
+        self.liststore = self.builder.get_object("liststore1")
 
         cell0 = Gtk.CellRendererText()
         # cell0.set_property("cell-background", Gdk.color_parse("#F8F8FF"))
@@ -49,7 +48,7 @@ class Gamelist(object):
         tvcolumn0.pack_start(cell0, True)
         tvcolumn0.set_min_width(50)
         tvcolumn0.set_attributes(cell0, text=0)
-        self.treeview.connect(u"row_activated", self.entry_clicked)
+        self.treeview.connect("row_activated", self.entry_clicked)
         self.tree_selection = self.treeview.get_selection()
 
         self.window.hide()
@@ -80,16 +79,16 @@ class Gamelist(object):
         self.liststore.clear()
         
     def addgame(self, gameno, headers):
-        h = unicode(gameno) + u". "
+        h = str(gameno) + ". "
         hdrno = 1
         for header in headers:
             header_value = headers.get(header)
             # ignore unset headers
-            if u"?" in header_value:
+            if "?" in header_value:
                 continue
             if hdrno > 1:
-                h += u", "
-            h += header + u": " + header_value
+                h += ", "
+            h += header + ": " + header_value
             hdrno += 1
         self.liststore.append([h])
 
@@ -97,14 +96,14 @@ class Gamelist(object):
         (treemodel, treeiter) = self.tree_selection.get_selected()
         if treeiter is not None:
             game_str = treemodel.get_value(treeiter, 0)
-            gameno = u""
+            gameno = ""
             i = 0
-            while game_str[i] != u".":
+            while game_str[i] != ".":
                 gameno += game_str[i]
                 i += 1
             try:
                 gameno = int(gameno)
-            except ValueError, ve:
+            except ValueError as ve:
                 return
             gv.load_save.load_game_from_multigame_file(gameno)
 

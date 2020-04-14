@@ -17,8 +17,6 @@
 #   along with jcchess.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from __future__ import division
-from __future__ import absolute_import
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
@@ -28,13 +26,13 @@ from . import gv
 #from . import gui
 from . import comments
 
-class Move_List(object):
+class Move_List:
 
     move_list_ref = None
 
     def __init__(self):
         glade_dir = gv.jcchess.get_glade_dir()
-        self.glade_file = os.path.join(glade_dir, u"move_list.glade")
+        self.glade_file = os.path.join(glade_dir, "move_list.glade")
         Move_List.move_list_ref = self
         self.comments = comments.get_ref()
 
@@ -46,22 +44,22 @@ class Move_List(object):
         self.builder.add_from_file(self.glade_file)
         self.builder.connect_signals(self)
         
-        self.window = self.builder.get_object(u"move_list_window")
-        self.vbox = self.builder.get_object(u"vbox1") #man
+        self.window = self.builder.get_object("move_list_window")
+        self.vbox = self.builder.get_object("vbox1") #man
         self.treeview = Gtk.TreeView()  #man
-        self.liststore = self.builder.get_object(u"liststore1")
+        self.liststore = self.builder.get_object("liststore1")
         
         self.scrolled_window = Gtk.ScrolledWindow()
         #self.scrolled_window.set_size_request(150,300)
         self.treeview.set_model(self.liststore)
         self.scrolled_window.add(self.treeview)           
         self.vbox.add(self.scrolled_window)        
-        self.comments_button = self.builder.get_object(u"comments_button")
+        self.comments_button = self.builder.get_object("comments_button")
         #self.builder.connect("button_press_event",self.comments_button_clicked_cb)
         
         cell0 = Gtk.CellRendererText()
         # cell0.set_property("cell-background", Gdk.color_parse("#F8F8FF"))
-        tvcolumn0 = Gtk.TreeViewColumn(u"#")
+        tvcolumn0 = Gtk.TreeViewColumn("#")
         self.treeview.append_column(tvcolumn0)
         tvcolumn0.pack_start(cell0, True)
         tvcolumn0.set_min_width(50)
@@ -69,7 +67,7 @@ class Move_List(object):
 
         cell1 = Gtk.CellRendererText()
         # cell1.set_property("cell-background", Gdk.color_parse("#F8F8FF"))
-        tvcolumn1 = Gtk.TreeViewColumn(_(u"Move"))
+        tvcolumn1 = Gtk.TreeViewColumn(_("Move"))
         self.treeview.append_column(tvcolumn1)
         tvcolumn1.pack_start(cell1, True)
         tvcolumn1.set_min_width(100)
@@ -77,7 +75,7 @@ class Move_List(object):
 
         cell2 = Gtk.CellRendererText()
         # cell1.set_property("cell-background", Gdk.color_parse("#F8F8FF"))
-        tvcolumn2 = Gtk.TreeViewColumn(_(u"Cmt"))
+        tvcolumn2 = Gtk.TreeViewColumn(_("Cmt"))
         self.treeview.append_column(tvcolumn2)
         tvcolumn2.pack_start(cell2, True)
         tvcolumn2.set_min_width(20)
@@ -85,8 +83,8 @@ class Move_List(object):
         
         
         self.tree_selection = self.treeview.get_selection()
-        self.treeview.connect(u"button_press_event", self.treeview_button_press)
-        self.treeview.connect(u"key_press_event", self.treeview_key_press)
+        self.treeview.connect("button_press_event", self.treeview_button_press)
+        self.treeview.connect("key_press_event", self.treeview_key_press)
         self.update()
 
     # user has closed the window
@@ -108,7 +106,7 @@ class Move_List(object):
 
         # update liststore
         self.liststore.clear()
-        self.liststore.append((u"0.", _(u"Start Pos"), u" "))
+        self.liststore.append(("0.", _("Start Pos"), " "))
         movelist = gv.jcchess.get_movelist()        
         moveno = 1
         if len(movelist) != 0:
@@ -116,23 +114,23 @@ class Move_List(object):
             for move in movelist:
                 m1 = move[0:2]
                 m2 = move[2:]
-                move = m1 + u'-' + m2
+                move = m1 + '-' + m2
                 comment = self.comments.get_comment(moveno)
                 if gv.show_moves == True:
-                    gv.gui.comment_view.get_buffer().set_text(u"-")
+                    gv.gui.comment_view.get_buffer().set_text("-")
                                     
-                if comment != u"":
-                    cind = u"..."
+                if comment != "":
+                    cind = "..."
                 else:
-                    cind = u" "
+                    cind = " "
                 if moveno % 2 == 1:
-                    strmoveno = unicode(int((moveno + 1) / 2)) + u"."
+                    strmoveno = str(int((moveno + 1) / 2)) + "."
                 else:
-                    strmoveno = u""
+                    strmoveno = ""
                     
                 #e = str(moveno) + ".", move, cind
                 e = strmoveno, move, cind
-                e1 = unicode(moveno) + u"." + u" " + move +u" " + cind #+"\n"
+                e1 = str(moveno) + "." + " " + move +" " + cind #+"\n"
                 le = []
                 le.append(e1)
                 self.liststore.append(e)
@@ -145,7 +143,7 @@ class Move_List(object):
                 moveno += 1
  
         comment = self.comments.get_comment(moveno)
-        if comment != u"":
+        if comment != "":
             if gv.show_moves == True:
                     gv.gui.comment_view.get_buffer().set_text(comment)
         GObject.idle_add(self.scroll_to_end)
@@ -158,9 +156,9 @@ class Move_List(object):
         self.comments.set_moveno(move_idx)
         if gv.show_moves == True:
             if move_idx > 0:
-                path = unicode(move_idx-1)
+                path = str(move_idx-1)
             #gv.gui.move_view.set_cursor(path, None,False) 
-            if path[0]!=0 and path!=u'0':
+            if path[0]!=0 and path!='0':
                 GObject.idle_add(gv.gui.move_view.scroll_to_cell,path,None, False, 0,0)  #arguments must be in list
             
         return
@@ -192,14 +190,14 @@ class Move_List(object):
                        
             (treemodel, treeiter) = gv.gui.move_view.get_selection().get_selected()
             if treeiter is not None:
-                k = gv.gui.movestore.get_value(treeiter,0).find(u".")      
+                k = gv.gui.movestore.get_value(treeiter,0).find(".")      
                 nmove = int(gv.gui.movestore.get_value(treeiter,0)[0:k])
                 self.comments.set_moveno(nmove)
                 # now call a method in jcchess.py to position it at the move
                 # clicked on
                 gv.jcchess.goto_move(nmove)  
              
-                path = unicode(nmove)
+                path = str(nmove)
                 self.treeview.set_cursor(path, None,False)  
                 GObject.idle_add(self.treeview.scroll_to_cell,path,None, False, 0,0)  #arguments must be in list
                 
@@ -229,9 +227,9 @@ class Move_List(object):
 
     def set_comment_ind(self, ind):
         if ind:
-            cind = u"..."
+            cind = "..."
         else:
-            cind = u" "
+            cind = " "
         (treemodel, treeiter) = self.tree_selection.get_selected()
         if treeiter is not None:
             self.liststore.set_value(treeiter, 2, cind)

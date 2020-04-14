@@ -16,7 +16,6 @@
 #   You should have received a copy of the GNU General Public License
 #   along with jcchess.  If not, see <http://www.gnu.org/licenses/>.
 #
-from __future__ import absolute_import
 from gi.repository import GLib
 from gi.repository import Gtk
 import os
@@ -27,11 +26,9 @@ from . import comments
 from . import gamelist
 import chess.pgn
 from .constants import WHITE, BLACK,  VERSION,  NAME
-from itertools import ifilter
-from io import open
 
 
-class Load_Save(object):
+class Load_Save:
 
     def __init__(self):
         self.move_list = move_list.get_ref()
@@ -41,20 +38,20 @@ class Load_Save(object):
     # Load game from a previously saved game
     def load_game(self, b):
         dialog = Gtk.FileChooserDialog(
-            _(u"Load.."), gv.gui.get_window(), Gtk.FileChooserAction.OPEN,
+            _("Load.."), gv.gui.get_window(), Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
         dialog.set_default_response(Gtk.ResponseType.OK)
         #dialog.set_current_folder(os.path.expanduser("~"))
         dialog.set_current_folder(gv.lastdir)
         filter = Gtk.FileFilter()
-        ifilter.set_name(u"pgn files")
-        ifilter.add_pattern(u"*.pgn")
+        filter.set_name("pgn files")
+        filter.add_pattern("*.pgn")
         dialog.add_filter(filter)
 
         filter = Gtk.FileFilter()
-        ifilter.set_name(u"All files")
-        ifilter.add_pattern(u"*")
+        filter.set_name("All files")
+        filter.add_pattern("*")
         dialog.add_filter(filter)
 
         response = dialog.run()
@@ -65,11 +62,11 @@ class Load_Save(object):
         fname = dialog.get_filename()
         gv.lastdir = os.path.dirname(fname)
         if gv.verbose == True:       
-            print u"opening: " + os.path.dirname(fname)
-        gv.gui.window.set_title(NAME + u" " + VERSION + u"  " + os.path.basename(fname))
+            print ("opening: " + os.path.dirname(fname))
+        gv.gui.window.set_title(NAME + " " + VERSION + "  " + os.path.basename(fname))
         dialog.destroy()
 
-        if fname.endswith(u".pgn"):
+        if fname.endswith(".pgn"):
             self.get_header_from_file(fname)
             #entries from malformatted files would break the GUI of the program
             if gv.show_header == True:
@@ -97,7 +94,7 @@ class Load_Save(object):
 
             # No games in file
             if gamecnt == 0:
-                gv.gui.info_box(u"No games in file")
+                gv.gui.info_box("No games in file")
                 return
 
             # single game file - Load the game
@@ -122,17 +119,17 @@ class Load_Save(object):
         moveno = 0
         movelist = []
         redolist = []
-        lastmove = u""
-        startpos = u"startpos"
+        lastmove = ""
+        startpos = "startpos"
         # if there is a FEN use that as board start position 
         # otherwise use standard start position
         try:
-            fen = game.headers[u"FEN"]
+            fen = game.headers["FEN"]
         except KeyError:
-            fen = u"std"
+            fen = "std"
         if gv.verbose:
-            print u"game=",game
-            print u"fen=",fen
+            print("game=",game)
+            print("fen=",fen)
         gv.board.init_board(fen)
         node = game
         while not node.is_end():
@@ -140,19 +137,19 @@ class Load_Save(object):
             stm = stm ^ 1 
             move = node.board().san(next_node.move)
             if gv.verbose:
-                print u"move=", move
-                print u"type=",type(move)
+                print("move=", move)
+                print("type=",type(move))
             move = gv.board.parse_san(move)
             if gv.verbose:
-                print u"move=", move
-                print u"type=",type(move)
+                print("move=", move)
+                print("type=",type(move))
             gv.board.add_move(move)
-            smove = unicode(move)                
+            smove = str(move)                
             movelist.append(smove)
             lastmove = smove
             
             # add comment for this move if present
-            if node.comment != u"":
+            if node.comment != "":
                 self.comments.set_comment(moveno, node.comment)
                         
             moveno += 1
@@ -162,7 +159,7 @@ class Load_Save(object):
             
         gv.ucib.set_newgame()                    
         gv.uciw.set_newgame()
-        gv.gui.set_status_bar_msg(u"game loaded")
+        gv.gui.set_status_bar_msg("game loaded")
         #self.gameover = False
 
         gv.jcchess.set_movelist(movelist)
@@ -187,12 +184,12 @@ class Load_Save(object):
         try:
                 fp = open(fname)
         except  :
-                gv.gui.info_box(u"Error  loading game - file not found")
+                gv.gui.info_box("Error  loading game - file not found")
                 return
         fp.close()
-        gv.gui.window.set_title(NAME + u" " + VERSION + u"  " + os.path.basename(fname))
+        gv.gui.window.set_title(NAME + " " + VERSION + "  " + os.path.basename(fname))
         
-        if fname.endswith(u".psn"):
+        if fname.endswith(".psn"):
             self.get_header_from_file(fname)
             if gv.show_header == True:
                 GLib.idle_add(gv.gui.header_lblsente.set_text, gv.sente[:50])
@@ -207,7 +204,7 @@ class Load_Save(object):
         try:
                 f = open(fname)
         except:
-                gv.gui.info_box(u"Error  loading game-headers - file not found")
+                gv.gui.info_box("Error  loading game-headers - file not found")
                 
                 return
         myList = []
@@ -217,24 +214,24 @@ class Load_Save(object):
         ff = False
         eventfound = False
         for line in myList:
-                if line[0] == u"[":
-                        if line.find(u"Date") != -1:
+                if line[0] == "[":
+                        if line.find("Date") != -1:
                                 gv.gamedate = line[6:-2]
                                 #print("Date: ", gv.gamedate)
                                 ff = True
-                        if line.find(u"Event") !=-1:
+                        if line.find("Event") !=-1:
                                 gv.event = line[7:-2]
-                                if gv.event==u"" or gv.event==u"##":
-                                        gv.event=u"none"
+                                if gv.event=="" or gv.event=="##":
+                                        gv.event="none"
                                 #print(gv.event)
                                 ff = True
                                 eventfound = True
                                
-                        if (line.find(u"Black")!=-1 or line.find(u"Sente")!=-1 ) and (line.find(u"SenteGrade")==-1) and (line.find(u"Black_grade")==-1):
+                        if (line.find("Black")!=-1 or line.find("Sente")!=-1 ) and (line.find("SenteGrade")==-1) and (line.find("Black_grade")==-1):
                                         gv.sente =  line[8:-2] #"Sente:" +
                                         
                                         ff = True
-                        if (line.find(u"White")!=-1 or line.find(u"Gote")!=-1) and (line.find(u"GoteGrade")==-1) and (line.find(u"White_grade")==-1):
+                        if (line.find("White")!=-1 or line.find("Gote")!=-1) and (line.find("GoteGrade")==-1) and (line.find("White_grade")==-1):
                                 gv.gote = line[7:-2]  #"Gote:" +
                                 ff = True
         #if eventfound == False and myList[0][0] == "[":
@@ -242,15 +239,15 @@ class Load_Save(object):
         #print("header from file:", gv.gamedate,  gv.gote,  gv.sente,  gv.event)
         if ff == True:
                 # Header from file: mask in event removed
-                if gv.event.find(u"##")!=-1:
-                        gv.event = u"no event"
+                if gv.event.find("##")!=-1:
+                        gv.event = "no event"
                 if gv.show_header == True:
                     GLib.idle_add( gv.gui.header_lbldate.set_text, gv.gamedate[:50])
                     GLib.idle_add( gv.gui.header_lblgote.set_text,  gv.gote[:50])
                     GLib.idle_add( gv.gui.header_lblsente.set_text, gv.sente[:50])
                     GLib.idle_add( gv.gui.header_lblevent.set_text, gv.event[:50])
         else:
-                gv.event = u"##"  # marks file without header
+                gv.event = "##"  # marks file without header
                 
                 
     # this routine is called from utils.py (when doing paste position)
@@ -271,7 +268,7 @@ class Load_Save(object):
 
         gv.ucib.set_newgame()
         gv.uciw.set_newgame()
-        gv.gui.set_status_bar_msg(_(u"ready"))
+        gv.gui.set_status_bar_msg(_("ready"))
         #self.gameover = False
 
         gv.jcchess.set_movelist([])
@@ -286,46 +283,46 @@ class Load_Save(object):
         stm = gv.jcchess.get_side_to_move()
         gv.jcchess.set_side_to_move(stm)
         gv.gui.set_side_to_move(stm)
-        gv.jcchess.set_lastmove(u"")
+        gv.jcchess.set_lastmove("")
 
         gv.tc.reset_clock()
 
     # called from utils.py as well as from this module
     def get_game(self):
 
-        gamestr = u""
+        gamestr = ""
         startpos = gv.jcchess.get_startpos()
         # properties
-        dat = unicode(date.today())
-        dat = dat.replace(u"-", u"/")
+        dat = str(date.today())
+        dat = dat.replace("-", "/")
 
-        zstr = u'[Date "' + dat + u'"]\n'
+        zstr = '[Date "' + dat + '"]\n'
         gamestr += zstr
 
-        zstr =  u'[Sente: ' + gv.jcchess.get_player(BLACK).strip() + u'"]\n'   
+        zstr =  '[Sente: ' + gv.jcchess.get_player(BLACK).strip() + '"]\n'   
         gamestr += zstr
 
-        zstr =  u'[Gote: ' + gv.jcchess.get_player(WHITE).strip() + u'"]\n' 
+        zstr =  '[Gote: ' + gv.jcchess.get_player(WHITE).strip() + '"]\n' 
         gamestr += zstr
 
         # sfen
-        if startpos == u"startpos":
-            zstr = u'[SFEN "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP' \
-                   u'/1B5R1/LNSGKGSNL b - 1"]\n'
+        if startpos == "startpos":
+            zstr = '[SFEN "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP' \
+                   '/1B5R1/LNSGKGSNL b - 1"]\n'
             gamestr += zstr
         else:
-            zstr = u'[SFEN "' + startpos + u'"]\n'
+            zstr = '[SFEN "' + startpos + '"]\n'
             gamestr += zstr
 
         # add comment if present
         comment = self.comments.get_comment(0)
-        if comment != u"":
-            gamestr = gamestr + u"{\n" + comment + u"\n}\n"
+        if comment != "":
+            gamestr = gamestr + "{\n" + comment + "\n}\n"
 
         # if the movelist is positioned part way through the game then
         # we must redo all moves so the full game will be saved
         redo_count = len(gv.jcchess.get_redolist())
-        for i in xrange(0, redo_count):
+        for i in range(0, redo_count):
             gv.jcchess.redo_move()
 
         # moves
@@ -335,28 +332,28 @@ class Load_Save(object):
 
         # if we did any redo moves then undo them now to get things back
         # the way they were
-        for i in xrange(0, redo_count):
+        for i in range(0, redo_count):
             gv.jcchess.undo_move()
 
-        if mvstr != u"":
-            mlst = mvstr.split(u",")
+        if mvstr != "":
+            mlst = mvstr.split(",")
 
             for m in mlst:
 
-                (capture, ispromoted, move) = m.split(u";")
+                (capture, ispromoted, move) = m.split(";")
 
-                if move.find(u"*") == -1:
+                if move.find("*") == -1:
                     m1 = move[0:3]
                     m2 = move[3:]
                     move = m1 + capture + m2
-                    if ispromoted == u"+":
-                        move = u"+" + move
-                zstr = unicode(moveno) + u"." + move + u"\n"
+                    if ispromoted == "+":
+                        move = "+" + move
+                zstr = str(moveno) + "." + move + "\n"
                 gamestr += zstr
                 # add comment for this move if present
                 comment = self.comments.get_comment(moveno)
-                if comment != u"":
-                    gamestr = gamestr + u"{" + comment + u"}\n"
+                if comment != "":
+                    gamestr = gamestr + "{" + comment + "}\n"
                 moveno += 1
         return (gamestr)
 
@@ -364,20 +361,20 @@ class Load_Save(object):
     def save_game(self, b):
 
         dialog = Gtk.FileChooserDialog(
-            _(u"Save.."), gv.gui.get_window(), Gtk.FileChooserAction.SAVE,
+            _("Save.."), gv.gui.get_window(), Gtk.FileChooserAction.SAVE,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
         dialog.set_default_response(Gtk.ResponseType.OK)
         dialog.set_current_folder(gv.lastdir)
 
         filter = Gtk.FileFilter()
-        ifilter.set_name(u"pgn files")
-        ifilter.add_pattern(u"*.pgn")
+        filter.set_name("pgn files")
+        filter.add_pattern("*.pgn")
         dialog.add_filter(filter)
 
         filter = Gtk.FileFilter()
-        ifilter.set_name(u"All files")
-        ifilter.add_pattern(u"*")
+        filter.set_name("All files")
+        filter.add_pattern("*")
         dialog.add_filter(filter)
 
         response = dialog.run()
@@ -391,23 +388,23 @@ class Load_Save(object):
             filename = dialog.get_filename()
             gv.lastdir = os.path.dirname(filename)
             if gv.verbose == True:
-                print u"saving: " + gv.lastdir
-            gv.gui.window.set_title(NAME + u" " + VERSION + u"  " + os.path.basename(filename))
+                print("saving: " + gv.lastdir)
+            gv.gui.window.set_title(NAME + " " + VERSION + "  " + os.path.basename(filename))
            
-            if not filename.endswith(u'.pgn'):
-                if dialog.get_filter().get_name() == u"pgn files":
-                    filename = filename + u".pgn" 
+            if not filename.endswith('.pgn'):
+                if dialog.get_filter().get_name() == "pgn files":
+                    filename = filename + ".pgn" 
 
             # If file already exists then ask before overwriting
             if os.path.isfile(filename):
                 resp = gv.gui.ok_cancel_box(
-                    _(u"Warning - file already exists and will be replaced.\n"
-                      u"Press Cancel if you do not want to overwrite it."))
+                    _("Warning - file already exists and will be replaced.\n"
+                      "Press Cancel if you do not want to overwrite it."))
                 if resp == Gtk.ResponseType.CANCEL:
                     dialog.destroy()
                     return
                     
-            if filename.endswith(u".pgn"):
+            if filename.endswith(".pgn"):
                     
                 game = gv.board.get_game()
 
@@ -418,17 +415,17 @@ class Load_Save(object):
                     next_node = node.variation(0)                                              
                     # add comment for this move if present
                     comment = self.comments.get_comment(moveno)
-                    if comment != u"":
+                    if comment != "":
                         node.comment = comment 
                     node = next_node
                     moveno += 1                
                    
                 # write game to file                
-                f = open(filename, u"w",)
-                print >>f, game,; f.write(u"\n\n")
+                f = open(filename, "w",)
+                print(game, file=f, end="\n\n")
                 f.close()
                 
-            u"""
+            """
             if filename.endswith(".pgn"):
                 # save in psn format
                 gamestr = self.get_game()
@@ -462,6 +459,6 @@ class Load_Save(object):
                 f.close()
             """
             
-            gv.gui.set_status_bar_msg(_(u"game saved:  " + filename) + u"  "+ VERSION)
+            gv.gui.set_status_bar_msg(_("game saved:  " + filename) + "  "+ VERSION)
 
         dialog.destroy()

@@ -17,7 +17,6 @@
 #   along with jcchess.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from __future__ import absolute_import
 from gi.repository import Gtk
 import cairo
 import os
@@ -25,28 +24,28 @@ import os
 from . import gv
 
 
-class Set_Board_Colours(object):
+class Set_Board_Colours:
 
-    BROWN, BLUE, GREEN = xrange(3)
+    BROWN, BLUE, GREEN = range(3)
 
     def __init__(self, prefix):
         if gv.verbose:
-            print u"in set_board_colours - init"
+            print("in set_board_colours - init")
         self.colour_scheme = Set_Board_Colours.BROWN
         if gv.verbose:
-            print u"colour scheme set to default:", self.colour_scheme
+            print("colour scheme set to default:", self.colour_scheme)
         # wood texture for border
-        path = os.path.join(prefix, u"images", u"wood1.png")
+        path = os.path.join(prefix, "images", "wood1.png")
         self.wood1 = cairo.ImageSurface.create_from_png(path)
 
     def set_colour_scheme(self, colour_scheme):
         if gv.verbose:
-            print u"in set_board_colours - set_colour_scheme"
-            print u"colour_scheme=", colour_scheme
+            print("in set_board_colours - set_colour_scheme")
+            print("colour_scheme=", colour_scheme)
             
         if colour_scheme not in (0, 1, 2):
             self.colour_scheme = Set_Board_Colours.BROWN
-            print u"colour scheme not valid - set to default:",self.colour_scheme
+            print("colour scheme not valid - set to default:",self.colour_scheme)
             return
 
         self.colour_scheme = colour_scheme
@@ -72,14 +71,14 @@ class Set_Board_Colours(object):
 
     def show_dialog(self, gtkaction):
         dialog = Gtk.Dialog(
-            _(u"Select Colour Scheme"), gv.gui.get_window(), 0,
+            _("Select Colour Scheme"), gv.gui.get_window(), 0,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OK, Gtk.ResponseType.OK))
-        rb1 = Gtk.RadioButton.new_with_label(None, u"Brown")
+        rb1 = Gtk.RadioButton.new_with_label(None, "Brown")
         dialog.vbox.pack_start(rb1, False, True, 5)
-        rb2 = Gtk.RadioButton.new_with_label_from_widget(rb1, u"Blue")
+        rb2 = Gtk.RadioButton.new_with_label_from_widget(rb1, "Blue")
         dialog.vbox.pack_start(rb2, False, True, 5)
-        rb3 = Gtk.RadioButton.new_with_label_from_widget(rb1, u"Green")
+        rb3 = Gtk.RadioButton.new_with_label_from_widget(rb1, "Green")
         dialog.vbox.pack_start(rb3, False, True, 5)
         dialog.show_all()
         dialog.set_default_response(Gtk.ResponseType.OK)
@@ -104,5 +103,5 @@ class Set_Board_Colours(object):
 
     def apply_colour_settings(self):
         if gv.verbose:
-            print u"set_board_colours - apply_colour_settings"
+            print("set_board_colours - apply_colour_settings")
         gv.gui.set_colours()

@@ -17,8 +17,6 @@
 #   along with jcchess.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from __future__ import division
-from __future__ import absolute_import
 from gi.repository import Gtk
 from gi.repository import GObject
 import cairo
@@ -27,7 +25,7 @@ from .constants import TARGET_TYPE_TEXT
 from . import gv
 from .board import SCALE
 
-class Drag_And_Drop(object):
+class Drag_And_Drop:
 
     drag_and_drop_ref = None
 
@@ -42,10 +40,10 @@ class Drag_And_Drop(object):
         x, y = data
 
         if gv.verbose:
-            print u"in drag begin"
-            print u"data=", data
-            print u"widget_name=", widget.get_name()
-            print u"source sq=", x, y
+            print("in drag begin")
+            print("data=", data)
+            print("widget_name=", widget.get_name())
+            print("source sq=", x, y)
 
         stm = gv.jcchess.get_side_to_move()
 
@@ -55,7 +53,7 @@ class Drag_And_Drop(object):
 
         self.src = sq
         if gv.verbose:
-            print u"source square: (x, y) = (", x, u",",  y, u") ", sq
+            print("source square: (x, y) = (", x, ",",  y, ") ", sq)
         self.src_x = x
         self.src_y = y
 
@@ -83,19 +81,19 @@ class Drag_And_Drop(object):
 
     def sendCallback(self, widget, context, selection, targetType, eventTime):
         if targetType == TARGET_TYPE_TEXT:
-            sel = u"jcchess"
+            sel = "jcchess"
             selection.set_text(sel, 8)
 
     def receiveCallback(self, widget, context, x, y, selection, targetType,
                         time, data):
         if gv.verbose:
-            print u"in receive callback"
-            print u"x=", x
-            print u"y=", y
-            print u"selection.data=", selection.get_text()
-            print u"targetType=", targetType
-            print u"time=", time
-            print u"data=", data
+            print("in receive callback")
+            print("x=", x)
+            print("y=", y)
+            print("selection.data=", selection.get_text())
+            print("targetType=", targetType)
+            print("time=", time)
+            print("data=", data)
 
         self.dnd_data_received = True
 
@@ -109,13 +107,13 @@ class Drag_And_Drop(object):
         # set destination square
         dst = sq
         if gv.verbose:
-            print u"dst =", dst
+            print("dst =", dst)
 
         move = gv.jcchess.get_move(self.piece, self.src, dst, self.src_x,
                                   self.src_y, x, y)
         if gv.verbose:
-            print u"move=", move
-            print
+            print("move=", move)
+            print()
 
         # if drag and drop failed then reinstate the piece where it
         # was dragged from

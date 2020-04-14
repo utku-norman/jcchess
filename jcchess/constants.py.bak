@@ -17,8 +17,8 @@
 #   along with jcchess.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-NAME = u"jcchess"
-VERSION = u"0.0.1"
+NAME = "jcchess"
+VERSION = "0.0.1"
 
 # These values match those used in the engine
 BLACK = 0
