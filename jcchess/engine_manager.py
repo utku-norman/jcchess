@@ -128,7 +128,7 @@ class Engine_Manager(object):
         sw.show()
         fr = Gtk.Frame()
         fr.show()
-        liststore = Gtk.ListStore(unicode, unicode)
+        liststore = Gtk.ListStore(str, str)
         for e in engine_list:
             engine_name, path, ucioptions = e
             #liststore.append(e)

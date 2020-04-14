@@ -34,12 +34,12 @@ class Pieces(object):
 
     # called from jcchess.py
     def load_pieces(self, prefix):
-        path = os.path.join(prefix, u"images", u"jcchess")
-        p1 = self.load_pieceset(os.path.join(prefix, u"images", u"pieceset1"))
-        p2 = self.load_pieceset(os.path.join(prefix, u"images", u"pieceset2"))
+        path = os.path.join(prefix, "images", "jcchess")
+        p1 = self.load_pieceset(os.path.join(prefix, "images", "pieceset1"))
+        p2 = self.load_pieceset(os.path.join(prefix, "images", "pieceset2"))
         self.piece_handles = (p1, p2)
 
-    u"""
+    """
     def load_pieceset1(self):
         images = [
             "p", "n", "b", "r", "k", "q",
@@ -60,13 +60,13 @@ class Pieces(object):
     """
 
     def load_pieceset(self, pieces_dir):
-        images = [u"pawn", u"knight", u"bishop", u"rook", u"king", u"queen"]
+        images = ["pawn", "knight", "bishop", "rook", "king", "queen"]
         pieces = []
 
         # Load pieces
-        for side in (u"B", u"W"):
+        for side in ("B", "W"):
             for image in images:
-                image = image + side + u".svg"
+                image = image + side + ".svg"
                 path = os.path.join(pieces_dir, image)
                 svghandle = Rsvg.Handle.new_from_file(path)
                 pieces.append(svghandle)
@@ -76,13 +76,13 @@ class Pieces(object):
     def gethandle(self, piece): 
         # pieces contains the list of possible pieces
         pieces = [
-            u"None", u"p", u"n", u"b", u"r", u"k", u"q",
-                  u"P", u"N", u"B", u"R", u"K", u"Q"]
+            "None", "p", "n", "b", "r", "k", "q",
+                  "P", "N", "B", "R", "K", "Q"]
         try:
             idx = pieces.index(piece)
         except ValueError, ve:
             traceback.print_exc()
-            print u"error piece not found, piece =", piece
+            print "error piece not found, piece =", piece
             print len(piece)
         return self.piece_handles[self.pieceset][idx-1]
 
@@ -91,18 +91,18 @@ class Pieces(object):
 
     def set_pieceset(self, pieceset):
         if pieceset not in (0,1):
-            print u"attempt to set invalid pieceset:",pieceset
+            print "attempt to set invalid pieceset:",pieceset
             return
         self.pieceset = pieceset
 
     def show_pieces_dialog(self, gtkaction):
         dialog = Gtk.Dialog(
-            _(u"Select Pieces"), gv.gui.get_window(), 0,
+            _("Select Pieces"), gv.gui.get_window(), 0,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OK, Gtk.ResponseType.OK))
-        rb1 = Gtk.RadioButton.new_with_label(None, u"Pieceset 1")
+        rb1 = Gtk.RadioButton.new_with_label(None, "Pieceset 1")
         dialog.vbox.pack_start(rb1, False, True, 5)
-        rb2 = Gtk.RadioButton.new_with_label_from_widget(rb1, u"Pieceset 2")
+        rb2 = Gtk.RadioButton.new_with_label_from_widget(rb1, "Pieceset 2")
         dialog.vbox.pack_start(rb2, False, True, 5)
         dialog.show_all()
         dialog.set_default_response(Gtk.ResponseType.OK)

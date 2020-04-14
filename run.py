@@ -6,7 +6,7 @@
 
 import sys
 
-assert sys.version_info >= (3,0)
+# assert sys.version_info >= (3,0)
 
 import jcchess.gv
 

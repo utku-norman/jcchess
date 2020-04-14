@@ -48,13 +48,13 @@ class Load_Save(object):
         #dialog.set_current_folder(os.path.expanduser("~"))
         dialog.set_current_folder(gv.lastdir)
         filter = Gtk.FileFilter()
-        ifilter.set_name(u"pgn files")
-        ifilter.add_pattern(u"*.pgn")
+        filter.set_name(u"pgn files")
+        filter.add_pattern(u"*.pgn")
         dialog.add_filter(filter)
 
         filter = Gtk.FileFilter()
-        ifilter.set_name(u"All files")
-        ifilter.add_pattern(u"*")
+        filter.set_name(u"All files")
+        filter.add_pattern(u"*")
         dialog.add_filter(filter)
 
         response = dialog.run()
@@ -371,13 +371,13 @@ class Load_Save(object):
         dialog.set_current_folder(gv.lastdir)
 
         filter = Gtk.FileFilter()
-        ifilter.set_name(u"pgn files")
-        ifilter.add_pattern(u"*.pgn")
+        filter.set_name(u"pgn files")
+        filter.add_pattern(u"*.pgn")
         dialog.add_filter(filter)
 
         filter = Gtk.FileFilter()
-        ifilter.set_name(u"All files")
-        ifilter.add_pattern(u"*")
+        filter.set_name(u"All files")
+        filter.add_pattern(u"*")
         dialog.add_filter(filter)
 
         response = dialog.run()

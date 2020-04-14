@@ -47,8 +47,8 @@ class Board(object):
         self.init_board()
         self.dnd = None        
 
-    def init_board(self, fen=u"std"):
-        if fen == u"std":
+    def init_board(self, fen="std"):
+        if fen == "std":
             self.chessboard = chess.Board() # init board
         else:
             self.chessboard = chess.Board(fen)    
@@ -59,14 +59,14 @@ class Board(object):
     # convert jcchess co-ordinates for square into
     # standard notation (e.g.  (1, 0) -> b1)
     def get_square_posn(self, x, y):
-        lets = u"abcdefghi"
+        lets = "abcdefghi"
         sq = lets[x] + unicode(y+1) 
         return sq
 
     # convert standard notation for square into
     # jcchess co-ordinates (e.g.  b1 -> (1, 0) )
     def get_gs_square_posn(self, sq):        
-        lets = u"abcdefgh"
+        lets = "abcdefgh"
         x = lets.index(sq[0:1])
         y = int(sq[1:2]) - 1
         return x, y
@@ -79,10 +79,10 @@ class Board(object):
         piece = self.get_piece(x, y)
         pieces = [
             [
-               u"r", u"n", u"b", u"q", u"k", u"p"
+               "r", "n", "b", "q", "k", "p"
             ],
             [
-                u"R", u"N", u"B", u"Q", u"K", u"P"
+                "R", "N", "B", "Q", "K", "P"
             ]
         ]
 
@@ -167,8 +167,8 @@ class Board(object):
                 try:
                     lastmove = self.chessboard.peek()
                 except IndexError:
-                    lastmove = u""
-                if lastmove != u"":
+                    lastmove = ""
+                if lastmove != "":
                     sqnum = chess.square(x, y)
                     if sqnum in (lastmove.from_square, lastmove.to_square):
                         hilite = True
@@ -193,7 +193,7 @@ class Board(object):
             cr.set_source_rgb(r, g, b)
             cr.rectangle(1, 1 , a.width-LINEWIDTH, a.height-LINEWIDTH)
             cr.fill()
-        if piece == u"None":
+        if piece == "None":
             return
         # set offset so piece is centered in the square
         cr.translate(a.width*(1.0-SCALE)/2.0, a.height*(1.0-SCALE)/2.0)
@@ -212,8 +212,14 @@ class Board(object):
 
     def get_piece(self, x, y):
         piece = self.chessboard.piece_at(chess.square(x, y))
-        piece = unicode(piece)   
-        return piece
+        
+        #piece2 = unicode(piece)
+        if piece is None:
+            piece2 = "None"
+        else:
+            piece2 = str(piece).split("'")[-1]
+        #print("GETTIN", piece, piece2)
+        return piece2
 
     def get_legal_moves(self):
         return self.chessboard.legal_moves
@@ -225,8 +231,8 @@ class Board(object):
         return self.chessboard.pop()
         
     def print_board(self):
-        print u"board fen:",repr(self.chessboard)
-        print u"board:\n",self.chessboard
+        print "board fen:",repr(self.chessboard)
+        print "board:\n",self.chessboard
         
     def is_gameover(self):
         if self.chessboard.is_game_over():
@@ -258,12 +264,12 @@ class Board(object):
         for i in xrange(0, redo_count):
             gv.jcchess.undo_move()
 
-        game.headers[u"Event"] = u"Computer Chess Game"
-        game.headers[u"Site"] = socket.gethostname()
-        game.headers[u"Date"] = datetime.strftime(datetime.now(), u'%Y.%m.%d')  
-        game.headers[u"Round"] = u"-"
-        game.headers[u"White"] = gv.jcchess.get_player(WHITE)
-        game.headers[u"Black"] = gv.jcchess.get_player(BLACK)
+        game.headers["Event"] = "Computer Chess Game"
+        game.headers["Site"] = socket.gethostname()
+        game.headers["Date"] = datetime.strftime(datetime.now(), u'%Y.%m.%d')  
+        game.headers["Round"] = "-"
+        game.headers["White"] = gv.jcchess.get_player(WHITE)
+        game.headers["Black"] = gv.jcchess.get_player(BLACK)
         return game
         
     def get_fen(self):

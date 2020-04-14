@@ -48,14 +48,14 @@ class Gui(object):
 
     def __init__(self):
         if Gui.gui_ref is not None:
-            raise RuntimeError(u"Attempt to create second gui instance")
+            raise RuntimeError("Attempt to create second gui instance")
         Gui.gui_ref = self
 
     def build_gui(self):
 
         self.gobactive = False        
         glade_dir = gv.jcchess.get_glade_dir() 
-        self.promotion_glade_file = os.path.join(glade_dir, u"promotion.glade")
+        self.promotion_glade_file = os.path.join(glade_dir, "promotion.glade")
         self.promotion_piece = u'q'
         self.engine_debug = engine_debug.get_ref()
         self.engine_output = engine_output.get_ref()
@@ -65,33 +65,33 @@ class Gui(object):
         self.enable_dnd = True
         self.show_coords = True
         self.highlight_moves = True
-        self.lastdir = os.path.expanduser(u"~") # Filehandling
+        self.lastdir = os.path.expanduser("~") # Filehandling
         # Create Main Window
         glade_dir = gv.jcchess.get_glade_dir()
-        self.glade_file = os.path.join(glade_dir, u"main_window.glade")
+        self.glade_file = os.path.join(glade_dir, "main_window.glade")
         self.glade_file_preferences = os.path.join(
-            glade_dir, u"preferences.glade")
+            glade_dir, "preferences.glade")
         self.builder = Gtk.Builder()
         self.builder.set_translation_domain(gv.domain)
         self.builder.add_from_file(self.glade_file)
         self.builder.connect_signals(self)
 
-        self.window = self.builder.get_object(u"main_window")
+        self.window = self.builder.get_object("main_window")
         screen = self.window.get_screen()
         self.screen_width = screen.get_width()
         self.screen_height = screen.get_height()
         self.set_window_size()
 
      
-        self.window.set_title(NAME + u" " + VERSION)
+        self.window.set_title(NAME + " " + VERSION)
 
         # 1 eventbox per board square
         self.eb = [[Gtk.EventBox() for x in xrange(8)] for x in xrange(8)]
 
         # Set a handler for delete_event that immediately exits GTK.
-        self.window.connect(u"delete_event", gv.jcchess.delete_event)
+        self.window.connect("delete_event", gv.jcchess.delete_event)
 
-        main_vbox = self.builder.get_object(u"main_vbox")
+        main_vbox = self.builder.get_object("main_vbox")
         main_vbox.show()
 
         # menu
@@ -103,13 +103,13 @@ class Gui(object):
         self.window.add_accel_group(accelgroup)
 
         # main action group
-        actiongroup = Gtk.ActionGroup(u"UIManagerAG")
+        actiongroup = Gtk.ActionGroup("UIManagerAG")
         self.actiongroup = actiongroup
 
         # action group for toggleactions
-        ta_action_group = Gtk.ActionGroup(u"AGPromoteMode")
+        ta_action_group = Gtk.ActionGroup("AGPromoteMode")
         ta_action_group.add_toggle_actions([(
-            u"promotemode", None, _(u"_Ask Before Promoting"), None, None,
+            "promotemode", None, _("_Ask Before Promoting"), None, None,
             self.promote_mode)])
              
         self.ta_action_group = ta_action_group
@@ -118,87 +118,87 @@ class Gui(object):
         actiongroup.add_actions([
             # NewGame and the handicap names are used in jcchess.py NewGame
             # routine. don't change them.
-            (u"NewGame", Gtk.STOCK_NEW, _(u"_New Game"), None, _(u"New Game"),
+            ("NewGame", Gtk.STOCK_NEW, _("_New Game"), None, _("New Game"),
              gv.jcchess.new_game_cb),
-            (u"LanceHandicap", None, _(u"_Lance"), None,
-             _(u"Lance Handicap"), gv.jcchess.new_game_cb),
-            (u"BishopHandicap", None, _(u"_Bishop"), None,
-             _(u"Bishop Handicap"), gv.jcchess.new_game_cb),
-            (u"RookHandicap", None, _(u"_Rook"), None,
-             _(u"Rook Handicap"), gv.jcchess.new_game_cb),
-            (u"RookandLanceHandicap", None, _(u"_Rook and Lance"), None,
-             _(u"Rook and Lance Handicap"), gv.jcchess.new_game_cb),
-            (u"TwoPieceHandicap", None, _(u"_2 Pieces"), None,
-             _(u"Two Piece Handicap"), gv.jcchess.new_game_cb),
-            (u"FourPieceHandicap", None, _(u"_4 Pieces"), None,
-             _(u"Four Piece Handicap"), gv.jcchess.new_game_cb),
-            (u"SixPieceHandicap", None, _(u"_6 Pieces"), None,
-             _(u"Six Piece Handicap"), gv.jcchess.new_game_cb),
-            (u"EightPieceHandicap", None, _(u"_8 Pieces"), None,
-             _(u"Eight Piece Handicap"), gv.jcchess.new_game_cb),
-            (u"TenPieceHandicap", None, _(u"_10 Pieces"), None,
-             _(u"Ten Piece Handicap"), gv.jcchess.new_game_cb),
-            (u"ThreePawnHandicap", None, _(u"_3 Pawns"), None,
-            _(u"Three Pawn Handicap"), gv.jcchess.new_game_cb),
-            (u"NewHandicapGame", None, _(u"_New Handicap Game")),
+            ("LanceHandicap", None, _("_Lance"), None,
+             _("Lance Handicap"), gv.jcchess.new_game_cb),
+            ("BishopHandicap", None, _("_Bishop"), None,
+             _("Bishop Handicap"), gv.jcchess.new_game_cb),
+            ("RookHandicap", None, _("_Rook"), None,
+             _("Rook Handicap"), gv.jcchess.new_game_cb),
+            ("RookandLanceHandicap", None, _("_Rook and Lance"), None,
+             _("Rook and Lance Handicap"), gv.jcchess.new_game_cb),
+            ("TwoPieceHandicap", None, _("_2 Pieces"), None,
+             _("Two Piece Handicap"), gv.jcchess.new_game_cb),
+            ("FourPieceHandicap", None, _("_4 Pieces"), None,
+             _("Four Piece Handicap"), gv.jcchess.new_game_cb),
+            ("SixPieceHandicap", None, _("_6 Pieces"), None,
+             _("Six Piece Handicap"), gv.jcchess.new_game_cb),
+            ("EightPieceHandicap", None, _("_8 Pieces"), None,
+             _("Eight Piece Handicap"), gv.jcchess.new_game_cb),
+            ("TenPieceHandicap", None, _("_10 Pieces"), None,
+             _("Ten Piece Handicap"), gv.jcchess.new_game_cb),
+            ("ThreePawnHandicap", None, _("_3 Pawns"), None,
+            _("Three Pawn Handicap"), gv.jcchess.new_game_cb),
+            ("NewHandicapGame", None, _("_New Handicap Game")),
             #
-            (u"Quit", Gtk.STOCK_QUIT, _(u"_Quit"), None,
-             _(u"Quit the Program"), gv.jcchess.quit_game),
-            (u"LoadGame", Gtk.STOCK_OPEN, _(u"_Load Game"), None,
-             _(u"Load Game"), gv.load_save.load_game),
-            (u"SaveGame", Gtk.STOCK_SAVE, _(u"_Save Game"), None,
-             _(u"Save Game"), gv.load_save.save_game),
-            (u"File", None, _(u"_File")),
-            (u"Edit", None, _(u"_Edit")),
-            (u"Undo", Gtk.STOCK_UNDO, _(u"_Undo Move"), u"<Control>U",
-             _(u"Undo Move"), gv.jcchess.undo_single_move),
-            (u"Redo", Gtk.STOCK_REDO, _(u"_Redo Move"), u"<Control>R",
-             _(u"Redo Move"), gv.jcchess.redo_single_move),
-            (u"MoveNow", None, _(u"_Move Now"), u"<Control>M",
-             _(u"Move Now"), gv.jcchess.move_now),
-            (u"SetBoardColours", None, _(u"_Set Board Colours"), None,
-             _(u"Set Board Colours"), gv.set_board_colours.show_dialog),
-            (u"SetPieces", None, _(u"_Set Pieces"), None,
-             _(u"Set Pieces"), gv.pieces.show_pieces_dialog),
-            (u"TimeControl", None, _(u"_Time Control"), None,
-             _(u"Time Control"), gv.tc.time_control),
+            ("Quit", Gtk.STOCK_QUIT, _("_Quit"), None,
+             _("Quit the Program"), gv.jcchess.quit_game),
+            ("LoadGame", Gtk.STOCK_OPEN, _("_Load Game"), None,
+             _("Load Game"), gv.load_save.load_game),
+            ("SaveGame", Gtk.STOCK_SAVE, _("_Save Game"), None,
+             _("Save Game"), gv.load_save.save_game),
+            ("File", None, _("_File")),
+            ("Edit", None, _("_Edit")),
+            ("Undo", Gtk.STOCK_UNDO, _("_Undo Move"), "<Control>",
+             _("Undo Move"), gv.jcchess.undo_single_move),
+            ("Redo", Gtk.STOCK_REDO, _("_Redo Move"), "<Control>R",
+             _("Redo Move"), gv.jcchess.redo_single_move),
+            ("MoveNow", None, _("_Move Now"), "<Control>M",
+             _("Move Now"), gv.jcchess.move_now),
+            ("SetBoardColours", None, _("_Set Board Colours"), None,
+             _("Set Board Colours"), gv.set_board_colours.show_dialog),
+            ("SetPieces", None, _("_Set Pieces"), None,
+             _("Set Pieces"), gv.pieces.show_pieces_dialog),
+            ("TimeControl", None, _("_Time Control"), None,
+             _("Time Control"), gv.tc.time_control),
             # ConfigureEngine1 - this name is used in engine_manager.
             # don't change it.
-            (u"ConfigureEngine1", None, _(u"_Configure Engine 1 (White)"), None,
-             _(u"Configure Engine 1"), gv.engine_manager.configure_engine),
-            (u"ConfigureEngine2", None, _(u"_Configure Engine 2 (Black)"), None,
-             _(u"Configure Engine 2"), gv.engine_manager.configure_engine),
-            (u"Players", None, _(u"_Players"), None,
-             _(u"Players"), gv.jcchess.set_players),
-            (u"Engines", None, _(u"_Engines"), None,
-             _(u"Engines"), gv.engine_manager.engines),
-            (u"CommonEngineSettings", None, _(u"_Common Engine Settings"), None,
-             _(u"Common Engine Settings"), gv.engine_manager.common_settings),
-            (u"MoveList", None, _(u"_Move List"), None,
-             _(u"Move List"), self.move_list.show_movelist_window),
-            (u"GameList", None, _(u"_Game List"), None,
-             _(u"Game List"), self.gamelist.show_gamelist_window_cb),
-            (u"EngineOutput", None, _(u"_Engine Output"), None,
-             _(u"Engine Output"), self.engine_output.show_engine_output_window),
-            (u"EngineDebug", None, _(u"_Engine Debug"), None,
-             _(u"Engine Debug"), self.engine_debug.show_debug_window),
-            (u"Options", None, _(u"_Options")),
-            (u"View", None, _(u"_View")),
-            (u"About", Gtk.STOCK_ABOUT, _(u"_About"), None,
-             _(u"Show About Box"), self.about_box),
-            (u"Help", None, _(u"_Help")),
-            (u"CopyPosition", None, _(u"_Copy Position"), None,
-             _(u"Copy Position"), utils.copy_FEN_to_clipboard),
-            (u"PastePosition", None, _(u"_Paste Position"), None,
-             _(u"Paste Position"), utils.paste_clipboard_to_FEN),
-            (u"CopyGame", None, _(u"_Copy Game"), None,
-             _(u"Copy Game"), utils.copy_game_to_clipboard),
-            (u"PasteGame", None, _(u"_Paste Game"), None,
-             _(u"Paste Game"), utils.paste_game_from_clipboard),
-            (u"EditPosition", None, _(u"_Edit Position"), None,
-             _(u"Edit Position"), self.enable_edit_mode),
-            (u"Preferences", None, _(u"_Preferences"), None,
-             _(u"Preferences"), self.preferences),
+            ("ConfigureEngine1", None, _("_Configure Engine 1 (White)"), None,
+             _("Configure Engine 1"), gv.engine_manager.configure_engine),
+            ("ConfigureEngine2", None, _("_Configure Engine 2 (Black)"), None,
+             _("Configure Engine 2"), gv.engine_manager.configure_engine),
+            ("Players", None, _("_Players"), None,
+             _("Players"), gv.jcchess.set_players),
+            ("Engines", None, _("_Engines"), None,
+             _("Engines"), gv.engine_manager.engines),
+            ("CommonEngineSettings", None, _("_Common Engine Settings"), None,
+             _("Common Engine Settings"), gv.engine_manager.common_settings),
+            ("MoveList", None, _("_Move List"), None,
+             _("Move List"), self.move_list.show_movelist_window),
+            ("GameList", None, _("_Game List"), None,
+             _("Game List"), self.gamelist.show_gamelist_window_cb),
+            ("EngineOutput", None, _("_Engine Output"), None,
+             _("Engine Output"), self.engine_output.show_engine_output_window),
+            ("EngineDebug", None, _("_Engine Debug"), None,
+             _("Engine Debug"), self.engine_debug.show_debug_window),
+            ("Options", None, _("_Options")),
+            ("View", None, _("_View")),
+            ("About", Gtk.STOCK_ABOUT, _("_About"), None,
+             _("Show About Box"), self.about_box),
+            ("Help", None, _("_Help")),
+            ("CopyPosition", None, _("_Copy Position"), None,
+             _("Copy Position"), utils.copy_FEN_to_clipboard),
+            ("PastePosition", None, _("_Paste Position"), None,
+             _("Paste Position"), utils.paste_clipboard_to_FEN),
+            ("CopyGame", None, _("_Copy Game"), None,
+             _("Copy Game"), utils.copy_game_to_clipboard),
+            ("PasteGame", None, _("_Paste Game"), None,
+             _("Paste Game"), utils.paste_game_from_clipboard),
+            ("EditPosition", None, _("_Edit Position"), None,
+             _("Edit Position"), self.enable_edit_mode),
+            ("Preferences", None, _("_Preferences"), None,
+             _("Preferences"), self.preferences),
             ]
         )
 
@@ -267,7 +267,7 @@ class Gui(object):
         #</menubar>
         #</ui>"""
         
-        ui = u"""<ui>
+        ui = """<ui>
         <menubar name="MenuBar">
             <menu action="File">
                 <menuitem action="NewGame"/>
@@ -323,15 +323,15 @@ class Gui(object):
         # Otherwise ubuntu uses the window bg colour which is not
         # correct.
         # don't need this on Fedora though.
-        eb_1 = self.builder.get_object(u"eb_1")
+        eb_1 = self.builder.get_object("eb_1")
         # eb_1 = Gtk.EventBox()
         vbox2 = Gtk.VBox(False, 0)
         # main_vbox.pack_start(vbox2, False)
         # main_vbox.pack_start(eb_1, False)
         eb_1.add(vbox2)
-        eb_1.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse(u"#EDECEB"))##EDECEB
+        eb_1.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse("#EDECEB"))##EDECEB
         # Create a MenuBar
-        menubar = uimanager.get_widget(u"/MenuBar")
+        menubar = uimanager.get_widget("/MenuBar")
         vbox2.pack_start(menubar, False, True, 0)
 
         # create a toolbar
@@ -357,9 +357,9 @@ class Gui(object):
         tb.attach(self.side_to_move[BLACK], 0, 1, 2,3)
         #self.side_to_move.set_tooltip_text(_("Header from loaded file"))
 
-        ue1 =Gtk.Label(label=_(u"Active:"))
-        lw = Gtk.Label(label=_(u"White ") + u": ")
-        lb = Gtk.Label(label=_(u"Black ") + u": ")
+        ue1 =Gtk.Label(label=_("Active:"))
+        lw = Gtk.Label(label=_("White ") + ": ")
+        lb = Gtk.Label(label=_("Black ") + ": ")
         ue1.set_alignment(0, 0.5)
         lw.set_alignment(0, 0.5)
         lb.set_alignment(0, 0.5)
@@ -367,11 +367,11 @@ class Gui(object):
         tb.attach(lw, 1, 2, 1, 2)
         tb.attach(lb, 1, 2, 2, 3)
 
-        self.engines_lblw = Gtk.Label(label=u" ") # This blank is mandatory, otherwise a fileheader will be written, reason not clear b.wille
+        self.engines_lblw = Gtk.Label(label=" ") # This blank is mandatory, otherwise a fileheader will be written, reason not clear b.wille
         self.engines_lblw.set_use_markup(True)
         self.engines_lblw.set_alignment(0, 0.5)
 
-        self.engines_lblb = Gtk.Label(label=_(u" "))
+        self.engines_lblb = Gtk.Label(label=_(" "))
         self.engines_lblb.set_use_markup(True)
         self.engines_lblb.set_alignment(0, 0.5)
 
@@ -379,11 +379,11 @@ class Gui(object):
         tb.attach(self.engines_lblb, 2, 3, 2, 3)
         
         #Engines
-        self.engines_lblw = Gtk.Label(label=u"jcchess")
+        self.engines_lblw = Gtk.Label(label="jcchess")
         self.engines_lblw.set_use_markup(True)
         self.engines_lblw.set_alignment(0, 0.5)
 
-        self.engines_lblb = Gtk.Label(label=_(u"human"))
+        self.engines_lblb = Gtk.Label(label=_("human"))
         self.engines_lblb.set_use_markup(True)
         self.engines_lblb.set_alignment(0, 0.5)
 
@@ -391,14 +391,14 @@ class Gui(object):
         tb.attach(self.engines_lblb, 2, 3, 2, 3)
         # time control
         self.tc_lbl = [
-            Gtk.Label(label=u"00:45:00 00/10"),
-            Gtk.Label(label=u"00:45:00 00/10")]
+            Gtk.Label(label="00:45:00 00/10"),
+            Gtk.Label(label="00:45:00 00/10")]
         self.tc_lbl[BLACK].set_alignment(0, 0.5)
         self.tc_lbl[WHITE].set_alignment(0, 0.5)
 
         tb.attach(self.tc_lbl[WHITE], 3, 4, 1, 2)
         tb.attach(self.tc_lbl[BLACK], 3, 4, 2, 3)
-        tb.set_tooltip_text(_(u"Side to move(>), engines and time"))
+        tb.set_tooltip_text(_("Side to move(>), engines and time"))
         toolitem.add(tb)
         toolbar.insert(toolitem, -1)          
         if  gv.show_header == True:
@@ -416,11 +416,11 @@ class Gui(object):
         tb = Gtk.Table(5, 8, False)
         if  gv.show_header == True:                 
     
-            self.header_lue = Gtk.Label(label=_(u"     From file: "))
-            self.header_lsente = Gtk.Label(label=_(u"     Sente(Blk)") + u": ")
-            self.header_lgote = Gtk.Label(label= _(u"     Gote (Whi)") + u": ")
-            self.header_levent = Gtk.Label(label=_(u"     Event") + u": ")
-            self.header_ldate = Gtk.Label(label=_(u"     Date") + u": ")
+            self.header_lue = Gtk.Label(label=_("     From file: "))
+            self.header_lsente = Gtk.Label(label=_("     Sente(Blk)") + ": ")
+            self.header_lgote = Gtk.Label(label= _("     Gote (Whi)") + ": ")
+            self.header_levent = Gtk.Label(label=_("     Event") + ": ")
+            self.header_ldate = Gtk.Label(label=_("     Date") + ": ")
             self.header_lue.set_alignment(0, 0.5)
             self.header_lsente.set_alignment(0, 0.5)
             self.header_lgote.set_alignment(0, 0.5)
@@ -431,10 +431,10 @@ class Gui(object):
             tb.attach(self.header_ldate, 5, 6, 2, 3)
             tb.attach(self.header_lsente, 5, 6, 4,5)
             tb.attach(self.header_lgote, 5,  6, 3, 4)
-            self.header_lblsente = Gtk.Label(label=_(u" ") )
-            self.header_lblgote = Gtk.Label(label=_(u" ")  )
-            self.header_lblevent = Gtk.Label(label=_(u"None"))
-            self.header_lbldate = Gtk.Label(label=unicode(date.today().day)+ _(u".")+ unicode(date.today().month) + _(u".") +unicode(date.today().year))
+            self.header_lblsente = Gtk.Label(label=_(" ") )
+            self.header_lblgote = Gtk.Label(label=_(" ")  )
+            self.header_lblevent = Gtk.Label(label=_("None"))
+            self.header_lbldate = Gtk.Label(label=unicode(date.today().day)+ _(".")+ unicode(date.today().month) + _(".") +unicode(date.today().year))
             self.header_lblsente.set_alignment(0, 0.5)
             self.header_lblgote.set_alignment(0, 0.5)
             self.header_lblevent.set_alignment(0, 0.5)
@@ -443,7 +443,7 @@ class Gui(object):
             tb.attach(self.header_lbldate, 7, 8, 2, 3)
             tb.attach(self.header_lblsente, 7,  8, 4, 5)
             tb.attach(self.header_lblgote, 7, 8, 3, 4)
-            tb.set_tooltip_text(_(u"Header from loaded file"))
+            tb.set_tooltip_text(_("Header from loaded file"))
             toolitem = Gtk.ToolItem()
             toolitem.add(tb)
             toolbar.insert(toolitem, -1)
@@ -460,11 +460,11 @@ class Gui(object):
         # stop/go buttons
         hb = Gtk.HBox(False, 0)
         self.gobutton = Gtk.ToolButton(Gtk.STOCK_YES)
-        self.gobutton.connect(u"clicked", gv.jcchess.go_clicked)
+        self.gobutton.connect("clicked", gv.jcchess.go_clicked)
         self.stopbutton = Gtk.ToolButton(Gtk.STOCK_NO)
-        self.stopbutton.connect(u"clicked", gv.jcchess.stop_clicked)
-        self.gobutton.set_tooltip_text(_(u"go"))
-        self.stopbutton.set_tooltip_text(_(u"stop"))
+        self.stopbutton.connect("clicked", gv.jcchess.stop_clicked)
+        self.gobutton.set_tooltip_text(_("go"))
+        self.stopbutton.set_tooltip_text(_("stop"))
         hb.pack_start(self.stopbutton, False, True, 0)
         hb.pack_start(self.gobutton, False, True, 0)
         
@@ -484,17 +484,17 @@ class Gui(object):
         
         hb = Gtk.HBox(False, 0)
         self.go_first = Gtk.ToolButton(Gtk.STOCK_GOTO_FIRST)
-        self.go_first.connect(u"clicked", gv.jcchess.undo_all)
+        self.go_first.connect("clicked", gv.jcchess.undo_all)
 
         self.go_back = Gtk.ToolButton(Gtk.STOCK_GO_BACK)
-        self.go_back.connect(u"clicked", gv.jcchess.undo_single_move)
+        self.go_back.connect("clicked", gv.jcchess.undo_single_move)
 
         self.go_forward = Gtk.ToolButton(Gtk.STOCK_GO_FORWARD)
-        self.go_forward.connect(u"clicked", gv.jcchess.redo_single_move)
+        self.go_forward.connect("clicked", gv.jcchess.redo_single_move)
 
         self.go_last = Gtk.ToolButton(Gtk.STOCK_GOTO_LAST)
-        self.go_last.connect(u"clicked", gv.jcchess.redo_all)
-        hb.set_tooltip_text(_(u"Moves"))
+        self.go_last.connect("clicked", gv.jcchess.redo_all)
+        hb.set_tooltip_text(_("Moves"))
         hb.pack_start(self.go_first, False, True, 0)
         hb.pack_start(self.go_back, False, True, 0)
         hb.pack_start(self.go_forward, False, True, 0)
@@ -512,20 +512,20 @@ class Gui(object):
         toolitem.add(hb)
         toolbar.insert(toolitem, -1)
 
-        main_grid = self.builder.get_object(u"grid1")
+        main_grid = self.builder.get_object("grid1")
         main_grid.set_row_homogeneous(True)
         main_grid.set_column_homogeneous(True)
        #Insert comment-editing buttons
         if gv.show_moves == True:
             hb = Gtk.HBox(False, 0)
             self.cedit = Gtk.ToolButton(Gtk.STOCK_EDIT)
-            self.cedit.connect(u"clicked", self.set_cedit)
-            hb.set_tooltip_text(_(u"Comments"))
+            self.cedit.connect("clicked", self.set_cedit)
+            hb.set_tooltip_text(_("Comments"))
             self.csave = Gtk.ToolButton(Gtk.STOCK_SAVE)
-            self.csave.connect(u"clicked", self.set_csave)
+            self.csave.connect("clicked", self.set_csave)
         
             self.ccancel = Gtk.ToolButton(Gtk.STOCK_CANCEL)
-            self.ccancel.connect(u"clicked", self.set_ccancel)
+            self.ccancel.connect("clicked", self.set_ccancel)
             #self.gobutton.set_tooltip_text(_("go"))
             #self.gobutton.set_tooltip_text(_("go"))
             hb.pack_start(self.cedit, False, True, 0)
@@ -540,14 +540,14 @@ class Gui(object):
             self.ccancel.set_sensitive(False)
             self.csave.set_sensitive(True)
           
-        main_grid = self.builder.get_object(u"grid1")
+        main_grid = self.builder.get_object("grid1")
         main_grid.set_row_homogeneous(True)
         main_grid.set_column_homogeneous(True)       
         # Insert Movebox
         if gv.show_moves == True:
             self.move_box = Gtk.ScrolledWindow()
             self.move_view = Gtk.TreeView()
-            mlabel = Gtk.Label(u"Moves")
+            mlabel = Gtk.Label("Moves")
             self.move_box.add(self.move_view)             #omitted viewport
             main_grid.attach(self.move_box, 0, 15, 4, 5)  #Synthax: left, top, width, height
             self.move_box.set_policy(1,1)
@@ -555,22 +555,22 @@ class Gui(object):
             #model
             self.movestore = Gtk.ListStore(GObject.TYPE_STRING)  #model for Treeview 
             self.move_view.set_model(self.movestore)
-            self.move_view.set_tooltip_text(_(u"moves: double-click or click-enter to jump to"))
+            self.move_view.set_tooltip_text(_("moves: double-click or click-enter to jump to"))
             self.comment_box = Gtk.ScrolledWindow()
             self.comment_view = Gtk.TextView()
-            clabel = Gtk.Label(u"Comments")
+            clabel = Gtk.Label("Comments")
             self.comment_box.add_with_viewport(self.comment_view)
             
             self.comment_view.set_wrap_mode(2)   #GTK_WRAP_WORD)
             g = self.comment_view.get_wrap_mode()
-            self.comment_view.set_tooltip_text(_(u"comments")) 
+            self.comment_view.set_tooltip_text(_("comments")) 
             
             main_grid.attach(self.comment_box, 28, 1, 4, 5)        
             main_grid.attach(clabel,28,0,4,1)
             #self.move_view.set_editable(False)
             cell0 = Gtk.CellRendererText()
             # cell0.set_property("cell-background", Gdk.color_parse("#F8F8FF"))
-            mvcolumn0 = Gtk.TreeViewColumn(u"#")
+            mvcolumn0 = Gtk.TreeViewColumn("#")
             self.move_view.append_column(mvcolumn0)
             mvcolumn0.pack_start(cell0, True)
             mvcolumn0.set_min_width(30)
@@ -579,7 +579,7 @@ class Gui(object):
             self.comment_view.set_cursor_visible(False)
             #self.comment_view.connect("realized", self.realized)
             #self.move_view.activate_on_single_click(False)
-            self.move_view.connect(u"cursor_changed", self.moves_clicked)
+            self.move_view.connect("cursor_changed", self.moves_clicked)
             #self.move_view.connect("key_press_event", self.moves_clicked)           #("row_activated", self.moves_clicked)   #"row_activated"
 
         # Create a 8x8 table for the main board
@@ -599,7 +599,7 @@ class Gui(object):
 
         eb2 = Gtk.EventBox()
 
-        eb2.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse(u"black"))
+        eb2.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse("black"))
         eb2.add(self.boardgrid)
         eb = Gtk.EventBox()
         eb.add(eb2)
@@ -615,24 +615,24 @@ class Gui(object):
         main_grid.attach(aspect_frame, 6, 0, 20, 20)
         #aspect_frame.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse("black"))
 
-        eb.connect(u"draw", self.draw_border)
+        eb.connect("draw", self.draw_border)
         self.border_eb = eb
 
         # status bar
-        self.status_bar = self.builder.get_object(u"status_bar")
+        self.status_bar = self.builder.get_object("status_bar")
 
         # set status bar bg color
         # Use an event box and set its background colour.
         # This was needed on Fedora 19 to set the statusbar bg colour.
         # Otherwise it uses the window bg colour which is not
         # correct. This was not needed on F17.
-        eb_2 = self.builder.get_object(u"eb_2")
+        eb_2 = self.builder.get_object("eb_2")
         #eb_2.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse(bg_colour)) ##EDECEB
         self.status_bar = Gtk.Statusbar()
         main_vbox.pack_start(self.status_bar, False, False, 0)
-        self.context_id = self.status_bar.get_context_id(u"jcchess statusbar")
+        self.context_id = self.status_bar.get_context_id("jcchess statusbar")
 
-        self.actiongroup.get_action(u"MoveNow").set_sensitive(False)
+        self.actiongroup.get_action("MoveNow").set_sensitive(False)
 
         self.window.show_all()
         self.side_to_move[BLACK].hide()
@@ -670,7 +670,7 @@ class Gui(object):
     
     def moves_clicked_(self, incr):
         model, triter = self.move_view.get_selection().get_selected()
-        k = self.movestore.get_value(triter,0).find(u".")      
+        k = self.movestore.get_value(triter,0).find(".")      
         nmove = int(self.movestore.get_value(triter,0)[0:k])   
         self.move_list.set_move(nmove)                                            
         self.move_list.move_box_selection()
@@ -692,7 +692,7 @@ class Gui(object):
         self.comment_view.cursor_visible = False       
         model, triter = self.move_view.get_selection().get_selected()
         if triter != None:
-            k = self.movestore.get_value(triter,0).find(u".")      
+            k = self.movestore.get_value(triter,0).find(".")      
             nmove = int(self.movestore.get_value(triter,0)[0:k])
             start = self.comment_view.get_buffer().get_start_iter()
             end = self.comment_view.get_buffer().get_end_iter()
@@ -715,7 +715,7 @@ class Gui(object):
 
     def init_board_square(self, x, y):
         event_box = self.eb[x][y]
-        event_box.connect(u"draw", self.draw_board_square, x, y)
+        event_box.connect("draw", self.draw_board_square, x, y)
         # use 7-y since 0,0 is in bottom left corner for chessboard
         # but top left for grid 
         self.boardgrid.attach(event_box, x, 7-y, 1, 1)
@@ -724,21 +724,21 @@ class Gui(object):
         event_box.show()
         event_box.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
         data = (x, y)
-        event_box.connect(u"button_press_event", gv.jcchess.square_clicked, data)
-        event_box.connect(u"drag_data_get", self.drag_and_drop.sendCallback)
+        event_box.connect("button_press_event", gv.jcchess.square_clicked, data)
+        event_box.connect("drag_data_get", self.drag_and_drop.sendCallback)
         event_box.connect_after(
-            u"drag_begin", self.drag_and_drop.drag_begin, (x, y))
-        event_box.connect_after(u"drag_end", self.drag_and_drop.drag_end)
+            "drag_begin", self.drag_and_drop.drag_begin, (x, y))
+        event_box.connect_after("drag_end", self.drag_and_drop.drag_end)
 
         # set up square as a destination square to receive drag data
         # from a drag & drop action
         event_box.connect(
-            u"drag_data_received", self.drag_and_drop.receiveCallback, (x, y))
+            "drag_data_received", self.drag_and_drop.receiveCallback, (x, y))
 
     def dnd_set_source_square(self, x, y):
         self.targets = [
             Gtk.TargetEntry.new(
-                u"text/plain", Gtk.TargetFlags.SAME_APP, TARGET_TYPE_TEXT)]
+                "text/plain", Gtk.TargetFlags.SAME_APP, TARGET_TYPE_TEXT)]
         self.eb[x][y].drag_source_set(
             Gdk.ModifierType.BUTTON1_MASK, self.targets, Gdk.DragAction.COPY)
 
@@ -748,7 +748,7 @@ class Gui(object):
     def dnd_set_dest_square(self, x, y):
         self.targets = [
             Gtk.TargetEntry.new(
-                u"text/plain", Gtk.TargetFlags.SAME_APP, TARGET_TYPE_TEXT)]
+                "text/plain", Gtk.TargetFlags.SAME_APP, TARGET_TYPE_TEXT)]
         self.eb[x][y].drag_dest_set(
             Gtk.DestDefaults.MOTION |
             #Gtk.DestDefaults.HIGHLIGHT |
@@ -773,7 +773,7 @@ class Gui(object):
     def apply_drag_and_drop_settings(self, player, stm):
 
         if gv.verbose:
-            print u"in apply_drag_and_drop_settings"
+            print "in apply_drag_and_drop_settings"
 
         # If drag and drop not enabled then exit
         # if not self.ta_action_group.get_action("enableDND").get_active():
@@ -789,7 +789,7 @@ class Gui(object):
 
                 # if not human to move then no drag and drop allowed on any
                 # square
-                if player != u"Human":
+                if player != "Human":
                     continue
 
                 # player is human so allow a square to be dragged if it
@@ -818,17 +818,17 @@ class Gui(object):
         except AttributeError:
             pass
         about.set_version(VERSION)
-        about.set_copyright(u"Copyright \u00A9 2010-2016 John Cheetham")
+        about.set_copyright("Copyright \u00A9 2010-2016 John Cheetham")
         about.set_comments(
-            u"jcchess is a program to play chess.")
-        about.set_authors([u"John Cheetham"])
+            "jcchess is a program to play chess.")
+        about.set_authors(["John Cheetham"])
         about.set_website(
-            u"http://www.johncheetham.com/projects/jcchess/index.html")
+            "http://www.johncheetham.com/projects/jcchess/index.html")
         about.set_logo(
             GdkPixbuf.Pixbuf.new_from_file(
-                os.path.join(gv.jcchess.prefix, u"images/logo.png")))
+                os.path.join(gv.jcchess.prefix, "images/logo.png")))
 
-        license = u"""jcchess is free software: you can redistribute it and/or modify
+        license = """jcchess is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
@@ -848,7 +848,7 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
     def set_status_bar_msg(self, msg):
         if gv.jcchess.quitting:
             return
-        self.context_id = self.status_bar.get_context_id(u"jcchess statusbar")
+        self.context_id = self.status_bar.get_context_id("jcchess statusbar")
         self.status_bar.push(self.context_id, msg)
             
     # ask before promoting
@@ -865,39 +865,39 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
         self.go_forward.set_sensitive(False)
         self.go_last.set_sensitive(False)
 
-        self.actiongroup.get_action(u"NewGame").set_sensitive(False)
-        self.actiongroup.get_action(u"NewHandicapGame").set_sensitive(False)
-        self.actiongroup.get_action(u"LoadGame").set_sensitive(False)
-        self.actiongroup.get_action(u"SaveGame").set_sensitive(False)
+        self.actiongroup.get_action("NewGame").set_sensitive(False)
+        self.actiongroup.get_action("NewHandicapGame").set_sensitive(False)
+        self.actiongroup.get_action("LoadGame").set_sensitive(False)
+        self.actiongroup.get_action("SaveGame").set_sensitive(False)
 
-        if mode == u"editmode":
+        if mode == "editmode":
             # edit menu
-            self.actiongroup.get_action(u"CopyPosition").set_sensitive(False)
-            self.actiongroup.get_action(u"PastePosition").set_sensitive(False)
-            self.actiongroup.get_action(u"CopyGame").set_sensitive(False)
-            self.actiongroup.get_action(u"PasteGame").set_sensitive(False)
-            self.actiongroup.get_action(u"EditPosition").set_sensitive(True)
+            self.actiongroup.get_action("CopyPosition").set_sensitive(False)
+            self.actiongroup.get_action("PastePosition").set_sensitive(False)
+            self.actiongroup.get_action("CopyGame").set_sensitive(False)
+            self.actiongroup.get_action("PasteGame").set_sensitive(False)
+            self.actiongroup.get_action("EditPosition").set_sensitive(True)
 
             # if edit mode disable all options menu
-            self.actiongroup.get_action(u"Options").set_sensitive(False)
+            self.actiongroup.get_action("Options").set_sensitive(False)
             self.gobutton.set_sensitive(False)
             self.stopbutton.set_sensitive(False)
         else:
-            self.actiongroup.get_action(u"Edit").set_sensitive(False)
+            self.actiongroup.get_action("Edit").set_sensitive(False)
             # set items in options menu
-            self.actiongroup.get_action(u"Undo").set_sensitive(False)
-            self.actiongroup.get_action(u"Redo").set_sensitive(False)
-            self.actiongroup.get_action(u"MoveNow").set_sensitive(True)
-            self.actiongroup.get_action(u"SetBoardColours").set_sensitive(False)
-            self.actiongroup.get_action(u"TimeControl").set_sensitive(False)
+            self.actiongroup.get_action("Undo").set_sensitive(False)
+            self.actiongroup.get_action("Redo").set_sensitive(False)
+            self.actiongroup.get_action("MoveNow").set_sensitive(True)
+            self.actiongroup.get_action("SetBoardColours").set_sensitive(False)
+            self.actiongroup.get_action("TimeControl").set_sensitive(False)
             self.actiongroup.get_action(
-                u"ConfigureEngine1").set_sensitive(False)
+                "ConfigureEngine1").set_sensitive(False)
             self.actiongroup.get_action(
-                u"ConfigureEngine2").set_sensitive(False)
-            self.actiongroup.get_action(u"Players").set_sensitive(False)
-            self.actiongroup.get_action(u"Engines").set_sensitive(False)
+                "ConfigureEngine2").set_sensitive(False)
+            self.actiongroup.get_action("Players").set_sensitive(False)
+            self.actiongroup.get_action("Engines").set_sensitive(False)
             self.actiongroup.get_action(
-                u"CommonEngineSettings").set_sensitive(False)
+                "CommonEngineSettings").set_sensitive(False)
 
             self.gobutton.set_sensitive(False)
             self.stopbutton.set_sensitive(True)
@@ -909,35 +909,35 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
         self.go_forward.set_sensitive(True)
         self.go_last.set_sensitive(True)
         # self.ta_action_group.get_action("enableDND").set_sensitive(True)
-        self.actiongroup.get_action(u"Undo").set_sensitive(True)
-        self.actiongroup.get_action(u"Redo").set_sensitive(True)
-        self.actiongroup.get_action(u"ConfigureEngine1").set_sensitive(True)
-        self.actiongroup.get_action(u"ConfigureEngine2").set_sensitive(True)
-        self.actiongroup.get_action(u"NewGame").set_sensitive(True)
-        self.actiongroup.get_action(u"NewHandicapGame").set_sensitive(True)
-        self.actiongroup.get_action(u"LoadGame").set_sensitive(True)
-        self.actiongroup.get_action(u"SaveGame").set_sensitive(True)
-        self.actiongroup.get_action(u"Engines").set_sensitive(True)
-        self.actiongroup.get_action(u"Players").set_sensitive(True)
-        self.actiongroup.get_action(u"TimeControl").set_sensitive(True)
-        self.actiongroup.get_action(u"MoveNow").set_sensitive(False)
-        self.actiongroup.get_action(u"CommonEngineSettings").set_sensitive(True)
-        self.actiongroup.get_action(u"SetBoardColours").set_sensitive(True)
+        self.actiongroup.get_action("Undo").set_sensitive(True)
+        self.actiongroup.get_action("Redo").set_sensitive(True)
+        self.actiongroup.get_action("ConfigureEngine1").set_sensitive(True)
+        self.actiongroup.get_action("ConfigureEngine2").set_sensitive(True)
+        self.actiongroup.get_action("NewGame").set_sensitive(True)
+        self.actiongroup.get_action("NewHandicapGame").set_sensitive(True)
+        self.actiongroup.get_action("LoadGame").set_sensitive(True)
+        self.actiongroup.get_action("SaveGame").set_sensitive(True)
+        self.actiongroup.get_action("Engines").set_sensitive(True)
+        self.actiongroup.get_action("Players").set_sensitive(True)
+        self.actiongroup.get_action("TimeControl").set_sensitive(True)
+        self.actiongroup.get_action("MoveNow").set_sensitive(False)
+        self.actiongroup.get_action("CommonEngineSettings").set_sensitive(True)
+        self.actiongroup.get_action("SetBoardColours").set_sensitive(True)
 
-        self.actiongroup.get_action(u"Edit").set_sensitive(True)
+        self.actiongroup.get_action("Edit").set_sensitive(True)
         # edit menu
-        self.actiongroup.get_action(u"CopyPosition").set_sensitive(True)
-        self.actiongroup.get_action(u"PastePosition").set_sensitive(True)
-        self.actiongroup.get_action(u"CopyGame").set_sensitive(True)
-        self.actiongroup.get_action(u"PasteGame").set_sensitive(True)
-        self.actiongroup.get_action(u"EditPosition").set_sensitive(True)
+        self.actiongroup.get_action("CopyPosition").set_sensitive(True)
+        self.actiongroup.get_action("PastePosition").set_sensitive(True)
+        self.actiongroup.get_action("CopyGame").set_sensitive(True)
+        self.actiongroup.get_action("PasteGame").set_sensitive(True)
+        self.actiongroup.get_action("EditPosition").set_sensitive(True)
 
         self.gobutton.set_sensitive(True)
         self.stopbutton.set_sensitive(False)
 
-        if mode == u"editmode":
+        if mode == "editmode":
             # if edit mode disable all options menu
-            self.actiongroup.get_action(u"Options").set_sensitive(True)
+            self.actiongroup.get_action("Options").set_sensitive(True)
 
     def enable_go_button(self):
         self.gobutton.set_sensitive(True)
@@ -959,7 +959,7 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
         self.builder.set_translation_domain(gv.domain)
         self.builder.add_from_file(self.promotion_glade_file)
         self.builder.connect_signals(self)
-        promotion_dialog = self.builder.get_object(u"promotion_dialog")
+        promotion_dialog = self.builder.get_object("promotion_dialog")
         promotion_dialog.set_transient_for(gv.gui.get_window())
 
         response_cancel = 1
@@ -980,22 +980,21 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
         #if not promotion_radio_button.get_active():
         #    return
         name = promotion_radio_button.get_label()
-        if name == u"Queen":
-            self.promotion_piece = u"q"
-        elif name == u"Rook":
-            self.promotion_piece = u"r"
-        elif name == u"Bishop":
-            self.promotion_piece = u"b"
-        elif name == u"Knight":
-            self.promotion_piece = u"n"
+        if name == "Queen":
+            self.promotion_piece = "q"
+        elif name == "Rook":
+            self.promotion_piece = "r"
+        elif name == "Bishop":
+            self.promotion_piece = "b"
+        elif name == "Knight":
+            self.promotion_piece = "n"
         else:
-            print u"invalid promotion in promotion_radio_button_changed in "
-                  u"gui.py:", name
-            self.promotion_piece = u"q"
+            print "invalid promotion in promotion_radio_button_changed in gui.py:", name
+            self.promotion_piece = "q"
 
     def update_toolbar(self, player):
-        self.engines_lblw.set_markup(u"<b>" + player[WHITE][:25] + u" </b>")
-        self.engines_lblb.set_markup(u"<b>" + player[BLACK][:25] + u" </b>")
+        self.engines_lblw.set_markup("<b>" + player[WHITE][:25] + " </b>")
+        self.engines_lblb.set_markup("<b>" + player[BLACK][:25] + " </b>")
 
     #
     # Update the clocks on the display
@@ -1017,7 +1016,7 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
         # markup = "<b>" + msg + "</b>"
         markup = msg
         dialog.set_markup(markup)
-        dialog.set_title(_(u"Info"))
+        dialog.set_title(_("Info"))
 
         # some secondary text
         markup = msg
@@ -1039,7 +1038,7 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
         # markup = "<b>" + msg + "</b>"
         markup = msg
         dialog.set_markup(markup)
-        dialog.set_title(_(u"Ok/Cancel"))
+        dialog.set_title(_("Ok/Cancel"))
 
         # some secondary text
         markup = msg
@@ -1074,11 +1073,11 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
 
     def set_colours(self):
         if gv.verbose:
-            print u"in gui set_colours"
+            print "in gui set_colours"
         bg_colour = u'#888a85'
         self.get_window().modify_bg(
             Gtk.StateType.NORMAL, Gdk.color_parse(bg_colour))
-        eb_2 = self.builder.get_object(u"eb_2")
+        eb_2 = self.builder.get_object("eb_2")
         eb_2.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse(bg_colour))
 
         # square colours are set in board.py in set_image_cairo
@@ -1097,7 +1096,7 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
     def build_edit_popup(self):
         self.edit_mode = False
 
-        u"""
+        """
         popup_items = ["Separator",
                        _("Empty"),
                        _("Pawn"),
@@ -1116,49 +1115,49 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
                        _("End")]
         """                
         
-        popup_items = [u"Separator",
-                       _(u"Empty"),
-                       _(u"Pawn"),
-                       _(u"Knight"),
-                       _(u"Bishop"),
-                       _(u"Rook"),
-                       _(u"Queen"),                
-                       _(u"King"),
-                       u"Separator", 
-                       _(u"Black to Move"),
-                       _(u"White to Move"),
-                       u"Separator",
-                       _(u"Clear Board"),
-                       u"Separator",
-                       _(u"End")]
+        popup_items = ["Separator",
+                       _("Empty"),
+                       _("Pawn"),
+                       _("Knight"),
+                       _("Bishop"),
+                       _("Rook"),
+                       _("Queen"),                
+                       _("King"),
+                       "Separator", 
+                       _("Black to Move"),
+                       _("White to Move"),
+                       "Separator",
+                       _("Clear Board"),
+                       "Separator",
+                       _("End")]
 
         # set up menu for black
         self.bmenu = Gtk.Menu()
-        menuitem = Gtk.MenuItem(_(u"Black"))
+        menuitem = Gtk.MenuItem(_("Black"))
         menuitem.set_sensitive(False)
         self.bmenu.append(menuitem)
         # self.bmenu.append(Gtk.SeparatorMenuItem())
         for item_name in popup_items:
-            if item_name == u"Separator":
+            if item_name == "Separator":
                 self.bmenu.append(Gtk.SeparatorMenuItem())
                 continue
             menuitem = Gtk.MenuItem(item_name)
             self.bmenu.append(menuitem)
-            menuitem.connect(u"activate", self.edit_popup_callback, BLACK)
+            menuitem.connect("activate", self.edit_popup_callback, BLACK)
 
         # set up menu for white
         self.wmenu = Gtk.Menu()
-        menuitem = Gtk.MenuItem(_(u"White"))
+        menuitem = Gtk.MenuItem(_("White"))
         menuitem.set_sensitive(False)
         self.wmenu.append(menuitem)
         # self.wmenu.append(Gtk.SeparatorMenuItem())
         for item_name in popup_items:
-            if item_name == u"Separator":
+            if item_name == "Separator":
                 self.wmenu.append(Gtk.SeparatorMenuItem())
                 continue
             menuitem = Gtk.MenuItem(item_name)
             self.wmenu.append(menuitem)
-            menuitem.connect(u"activate", self.edit_popup_callback, WHITE)
+            menuitem.connect("activate", self.edit_popup_callback, WHITE)
 
     # called when the user clicks on an item in the popup menu when editing
     # the board
@@ -1168,35 +1167,35 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
             piece_name = menuitem.get_label()
         except AttributeError, ae:
             self.info_box(
-                u"Unable to edit board - you need a newer version of pygtk"
-                u"(version 2.16 or above)")
+                "Unable to edit board - you need a newer version of pygtk"
+                "(version 2.16 or above)")
             return
 
-        if piece_name == _(u"Clear Board"):
+        if piece_name == _("Clear Board"):
             gv.board.clear_board()
             return
 
-        if piece_name == _(u"Black to Move"):
+        if piece_name == _("Black to Move"):
             gv.jcchess.set_side_to_move(BLACK)
             self.set_side_to_move(BLACK)   # update ind in gui
             gv.board.chessboard.turn=chess.BLACK
             return
 
-        if piece_name == _(u"White to Move"):
+        if piece_name == _("White to Move"):
             gv.jcchess.set_side_to_move(WHITE)
             self.set_side_to_move(WHITE)   # update ind in gui
             gv.board.chessboard.turn=chess.WHITE
             return
 
-        if piece_name == _(u"Cancel"):
+        if piece_name == _("Cancel"):
             self.edit_mode = False
             gv.jcchess.set_side_to_move(self.orig_stm)
             self.set_side_to_move(self.orig_stm)
             gv.board.update()            # restore board to its pre-edit state
-            self.enable_menu_items(mode=u"editmode")
+            self.enable_menu_items(mode="editmode")
             return
 
-        if piece_name == _(u"End"):
+        if piece_name == _("End"):
             self.end_edit()
             return
 
@@ -1212,19 +1211,19 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
         #    _("King"): " k", _("+Pawn"): "+p", _("+Lance"): "+l", _("+Knight"): "+n",
         #    _("+Silver"): "+s", _("+Bishop"): "+b", _("+Rook"): "+r"} 
             
-        if piece_name == _(u"Empty"):
+        if piece_name == _("Empty"):
             piece = None
-        elif piece_name == _(u"Pawn"):
+        elif piece_name == _("Pawn"):
             piece = chess.PAWN
-        elif piece_name == _(u"Knight"):
+        elif piece_name == _("Knight"):
             piece = chess.KNIGHT
-        elif piece_name == _(u"Bishop"):
+        elif piece_name == _("Bishop"):
             piece = chess.BISHOP
-        elif piece_name == _(u"Rook"):
+        elif piece_name == _("Rook"):
              piece = chess.ROOK
-        elif piece_name == _(u"Queen"):
+        elif piece_name == _("Queen"):
             piece = chess.QUEEN
-        elif piece_name == _(u"King"):
+        elif piece_name == _("King"):
             piece = chess.KING    
             
 
@@ -1240,7 +1239,7 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
         self.edit_mode = False
         fen = gv.board.get_fen()
         gv.load_save.init_game(fen)      # update board to reflect edit
-        self.enable_menu_items(mode=u"editmode")
+        self.enable_menu_items(mode="editmode")
 
     def enable_edit_mode(self, action):
         # if already in edit mode then save edit position and exit edit mode
@@ -1249,8 +1248,8 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
             return
         self.edit_mode = True
         self.orig_stm = gv.jcchess.get_side_to_move()
-        self.set_status_bar_msg(u"Edit Mode")
-        self.disable_menu_items(mode=u"editmode")
+        self.set_status_bar_msg("Edit Mode")
+        self.disable_menu_items(mode="editmode")
 
     def get_edit_mode(self):
         return self.edit_mode
@@ -1291,7 +1290,7 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
             float(r_int) / 255, float(g_int) / 255, float(b_int) / 255)
 
         cr.select_font_face(
-            u"Monospace", cairo.FONT_SLANT_OBLIQUE, cairo.FONT_WEIGHT_NORMAL)
+            "Monospace", cairo.FONT_SLANT_OBLIQUE, cairo.FONT_WEIGHT_NORMAL)
 
         tb_x = self.boardgrid.get_allocation().x
         tb_y = self.boardgrid.get_allocation().y
@@ -1313,7 +1312,7 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
 
         cr.set_font_size(font_size)
 
-        let = u"abcdefgh"        
+        let = "abcdefgh"        
         xpos = int((widget.get_allocation().width - tb_width) / 2) + int(sq_size / 2)
         ypos1 = 14
         ypos2 = a.height - 7
@@ -1351,15 +1350,15 @@ along with jcchess.  If not, see <http://www.gnu.org/licenses/>."""
         self.builder.set_translation_domain(gv.domain)
         self.builder.add_from_file(self.glade_file_preferences)
         self.builder.connect_signals(self)
-        dialog = self.builder.get_object(u"preferences")
+        dialog = self.builder.get_object("preferences")
         dialog.set_transient_for(self.window)
         # show co-ords
-        coords_checkbutton = self.builder.get_object(u"coords_checkbutton")
+        coords_checkbutton = self.builder.get_object("coords_checkbutton")
         coords_checkbutton.set_active(self.show_coords)
 
         # highlight moves
         highlight_moves_checkbutton = self.builder.get_object(
-            u"highlight_checkbutton")
+            "highlight_checkbutton")
 
         highlight_moves_checkbutton.set_active(self.highlight_moves)
 
